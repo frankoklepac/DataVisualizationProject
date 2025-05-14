@@ -18,6 +18,8 @@
         const width = 800 - margin.left - margin.right;
         const height = 500 - margin.top - margin.bottom;
 
+        const verticalLines = ["Season1", "Season2", "Season3", "Season4", "Season5", "Season6", "Season7", "Season8", "Season9", "Season10", "Season11", "Season12", "Season13", "Season14"];
+
         const svg = d3.select("#chart")
             .append("svg")
             .attr("width", width + margin.left + margin.right)
@@ -125,7 +127,18 @@
                 .style("font-size", "12px")
                 .attr("alignment-baseline", "middle");
 
-            
+            svg.selectAll(".vertical-line")
+                .data(verticalLines)
+                .enter()
+                .append("line")
+                .attr("class", "vertical-line")
+                .attr("x1", d => xScale(d))
+                .attr("x2", d => xScale(d))
+                .attr("y1", 0)
+                .attr("y2", height)
+                .attr("stroke", "#ccc") 
+                .attr("stroke-dasharray", "4,4") 
+                .attr("stroke-width", 1);
         });
 
         
