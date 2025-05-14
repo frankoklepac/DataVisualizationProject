@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Nationalities Trend</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/player_nationalities.css">
+</head>
+<body>
+    <a href="index.html">Index</a>
+    <h1>Player Nationalities Trend Over Seasons</h1>
+    <div id="chart"></div>
+
+    <script>
+        const margin = { top: 20, right: 150, bottom: 50, left: 50 };
+        const width = 800 - margin.left - margin.right;
+        const height = 500 - margin.top - margin.bottom;
+
+        const svg = d3.select("#chart")
+            .append("svg")
+            .attr("width", width + margin.left + margin.right)
+            .attr("height", height + margin.top + margin.bottom)
+            .append("g")
+            .attr("transform", `translate(${margin.left},${margin.top})`);
+        
+            const tooltip = d3.select("body")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        d3.csv("data/player_nationalities.csv").then(data => {
+            const seasons = d3.range(1, 15).map(d => `Season${d}`);
+            const parsedData = data.map(row => ({
+                nation: row.Nation,
+                values: seasons.map(season => ({
+                    season: season,
+                    players: +row[season]
+                }))
+            }));
+
+            const xScale = d3.scalePoint()
+                .domain(seasons)
+                .range([0, width]);
+
+            const yScale = d3.scaleLinear()
+                .domain([0, d3.max(parsedData, d => d3.max(d.values, v => v.players))])
+                .range([height, 0]);
+
+            svg.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll("text")
+                .attr("transform", "rotate(-45)")
+                .style("text-anchor", "end");
+
+            svg.append("g")
+                .call(d3.axisLeft(yScale));
+
+            svg.append("g")
+            .attr("class", "grid")
+            .selectAll("line")
+            .data(yScale.ticks()) 
+            .enter()
+            .append("line")
+            .attr("x1", 0) 
+            .attr("x2", width) 
+            .attr("y1", d => yScale(d)) 
+            .attr("y2", d => yScale(d)) 
+            .attr("stroke", "#ccc") 
+            .attr("stroke-dasharray", "4,4"); 
+
+            const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+            svg.selectAll(".line")
+                .data(parsedData)
+                .enter()
+                .append("path")
+                .attr("class", "line")
+                .attr("d", d => d3.line()
+                    .x(v => xScale(v.season))
+                    .y(v => yScale(v.players))(d.values)
+                )
+                .attr("stroke", d => color(d.nation))
+                .attr("stroke-width", 2)
+                .attr("fill", "none")
+                .on("mouseover", function(event, d) {
+                    d3.selectAll(".line").classed("dimmed", true); 
+                    d3.select(this).classed("dimmed", false).classed("highlighted", true);  
+
+                    tooltip.transition().duration(200).style("opacity", 1);
+                    tooltip.html(d.nation) 
+                        .style("left", (event.pageX + 10) + "px") 
+                        .style("top", (event.pageY - 20) + "px");
+                })
+                .on("mousemove", function(event) {
+                    tooltip.style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 20) + "px");
+                })
+                .on("mouseout", function() {
+                    d3.selectAll(".line").classed("dimmed", false).classed("highlighted", false);
+                    tooltip.transition().duration(200).style("opacity", 0);
+                });
+                
+
+            const legend = svg.selectAll(".legend")
+                .data(parsedData)
+                .enter()
+                .append("g")
+                .attr("class", "legend")
+                .attr("transform", (d, i) => `translate(${width + 10},${i * 20})`);
+
+            legend.append("rect")
+                .attr("x", 0)
+                .attr("y", 0)
+                .attr("width", 10)
+                .attr("height", 10)
+                .attr("fill", d => color(d.nation));
+
+            legend.append("text")
+                .attr("x", 15)
+                .attr("y", 10)
+                .text(d => d.nation)
+                .style("font-size", "12px")
+                .attr("alignment-baseline", "middle");
+
+            
+        });
+
+        
+    </script>
+</body>
+</html>
