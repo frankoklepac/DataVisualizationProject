@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <link rel="stylesheet" href="style/style.css" />
+  <link rel="stylesheet" href="style/finals.css" />
+  <title>Viewership and Prizepool</title>
+</head>
+<body>
+  <div class="header">
+    <div>
+        <h1>League of Legends World Championship History</h1>
+    </div>
+    <div class="header-nav">
+        <ul>
+            <li><a href="index.html">Homepage</a></li>
+            <li><a href="statistics.html">Statistics</a></li>
+            <li><a href="source.html">Source</a></li>
+        </ul>
+    </div>
+  </div>
+  <div class="content">
+    <div class="finals-body">
+      <div class="finals-buttons">
+        <button id="viewership-btn">Show Viewership</button>
+        <button id="prizepool-btn">Show Prize Pool</button>
+      </div>
+      <div class="graph-center">
+        <div id="viewership-graph"></div>
+        <div id="prizepool-graph" style="display:none;"></div>
+      </div>
+    </div>
+  
+    <div id="tooltip" 
+    style="position: absolute; background: #333; color: #fff; padding: 5px 10px; border-radius: 4px; pointer-events: none; opacity: 0;">
+    </div>
+  </div>
+  <div class="footer">
+    <p><a href="https://github.com/frankoklepac">Created by F.K.</a></p>
+  </div>
+  <script>
+    let finalsData = null;
+
+    d3.csv("data/finals.csv").then(function (data) {
+      data.forEach(d => {
+        d.Prize_Pool = +d.Prize_Pool.toString().replace(/[\.,]/g, m => m === '.' ? '' : '.');
+        d.Peak_Viewers = +d.Peak_Viewers.toString().replace(/[\.,]/g, m => m === '.' ? '' : '.');
+      });
+      finalsData = data;
+      showViewership(); 
+    });
+
+    document.getElementById('viewership-btn').onclick = showViewership;
+    document.getElementById('prizepool-btn').onclick = showPrizePool;
+
+    function showViewership() {
+      document.getElementById('viewership-graph').style.display = 'block';
+      document.getElementById('prizepool-graph').style.display = 'none';
+      drawLineChart({
+        container: "#viewership-graph",
+        data: finalsData,
+        xKey: "Season",
+        yKey: "Prize_Pool",
+        yLabel: "Peak Viewers",
+        lineColor: "#2a9d8f",
+        annotateSeason6: true
+      });
+    }
+
+    function showPrizePool() {
+      document.getElementById('viewership-graph').style.display = 'none';
+      document.getElementById('prizepool-graph').style.display = 'block';
+      drawLineChart({
+        container: "#prizepool-graph",
+        data: finalsData,
+        xKey: "Season",
+        yKey: "Peak_Viewers",
+        yLabel: "Prize Pool (USD)",
+        lineColor: "#e9c46a",
+        annotateSeason8: true
+      });
+    }
+
+    function drawLineChart({ container, data, xKey, yKey, yLabel, lineColor, annotateSeason6, annotateSeason8 }) {
+      d3.select(container).html("")
+      const width = 900, height = 350, margin = { top: 80, right: 30, bottom: 50, left: 110 };
+
+      const svg = d3.select(container)
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+      const x = d3.scalePoint()
+        .domain(data.map(d => d[xKey]))
+        .range([margin.left, width - margin.right]);
+
+      const y = d3.scaleLinear()
+        .domain([0, d3.max(data, d => d[yKey]) * 1.1])
+        .range([height - margin.bottom, margin.top]);
+
+      svg.append("g")
+        .attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(x))
+        .selectAll("text")
+        .attr("transform", "rotate(-30)")
+        .style("text-anchor", "end");
+
+      svg.append("g")
+        .attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y).ticks(8));
+
+      svg.append("text")
+        .attr("x", -(height / 2))
+        .attr("y", 20)
+        .attr("transform", "rotate(-90)")
+        .attr("text-anchor", "middle")
+        .attr("fill", "#fff")
+        .attr("font-size", "16px")
+        .text(yLabel);
+
+      const tooltip = d3.select("#tooltip");
+
+      const path = svg.append("path")
+        .datum(data)
+        .attr("fill", "none")
+        .attr("stroke", lineColor)
+        .attr("stroke-width", 3)
+        .attr("d", d3.line()
+          .x(d => x(d[xKey]))
+          .y(d => y(d[yKey]))
+        );
+
+      const totalLength = path.node().getTotalLength();
+      path.attr("stroke-dasharray", totalLength + " " + totalLength)
+        .attr("stroke-dashoffset", totalLength)
+        .transition()
+        .duration(1200)
+        .ease(d3.easeLinear)
+        .attr("stroke-dashoffset", 0);
+
+      const circles = svg.selectAll("circle")
+        .data(data)
+        .enter()
+        .append("circle")
+        .attr("cx", d => x(d[xKey]))
+        .attr("cy", d => y(d[yKey]))
+        .attr("r", 0)
+        .attr("fill", lineColor);
+
+      circles.transition()
+        .delay((d, i) => {
+          const thisX = x(d[xKey]);
+          const thisY = y(d[yKey]);
+
+          const pathNode = path.node();
+          let minDist = Infinity, minL = 0;
+          for (let l = 0; l <= totalLength; l += 2) {
+            const p = pathNode.getPointAtLength(l);
+            const dist = Math.hypot(p.x - thisX, p.y - thisY);
+            if (dist < minDist) {
+              minDist = dist;
+              minL = l;
+            }
+          }
+          return minL / totalLength * 1200; 
+        })
+      .duration(300)
+      .attr("r", 5);  
+      circles
+        .on("mouseover", function (event, d) {
+          tooltip
+            .style("opacity", 1)
+            .html(`<b>${d[xKey]}</b><br>${yLabel}: ${d[yKey].toLocaleString()}`)
+            .style("left", (event.pageX + 15) + "px")
+            .style("top", (event.pageY - 28) + "px");
+          d3.select(this).attr("r", 8);
+        })
+        .on("mousemove", function (event) {
+          tooltip
+            .style("left", (event.pageX + 15) + "px")
+            .style("top", (event.pageY - 28) + "px");
+        })
+        .on("mouseout", function () {
+          tooltip.style("opacity", 0);
+          d3.select(this).attr("r", 5);
+        });
+
+      if (annotateSeason6) {
+        svg.append("line")
+          .attr("x1", x("Season 6"))
+          .attr("y1", height - margin.bottom)
+          .attr("x2", x("Season 6"))
+          .attr("y2", margin.top)
+          .attr("stroke", "#A9A9A9")
+          .attr("stroke-width", 2)
+          .attr("stroke-dasharray", "5,5");
+
+        svg.append("text")
+          .attr("x", x("Season 6"))
+          .attr("y", margin.top - 30)
+          .attr("text-anchor", "middle")
+          .attr("fill", "#000")
+          .attr("font-size", "12px")
+          .text("After Season 6, China viewers not counted");
+      }
+
+      if (annotateSeason8) {
+        svg.append("line")
+          .attr("x1", x("Season 8"))
+          .attr("y1", height - margin.bottom)
+          .attr("x2", x("Season 8"))
+          .attr("y2", margin.top)
+          .attr("stroke", "#A9A9A9")
+          .attr("stroke-width", 2)
+          .attr("stroke-dasharray", "5,5");
+
+        svg.append("text")
+          .attr("x", x("Season 8"))
+          .attr("y", margin.top - 30)
+          .attr("text-anchor", "middle")
+          .attr("fill", "#000")
+          .attr("font-size", "12px")
+          .text("After Season 8, prizepool has a fixed priced with bonuses from skin sales");
+      }
+
+    }
+  </script>
+</body>
+</html>

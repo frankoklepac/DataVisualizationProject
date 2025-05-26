@@ -1,0 +1,89 @@
+.finals-body {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: #F9F6EE;
+  margin: 0; 
+  padding: 0;
+  background: #10182b;     
+  height: 71vh;
+}
+
+.finals-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#viewership-btn, #prizepool-btn {
+  background-color: #1A2746;
+  border: 1px solid #F9F6EE;
+  color: #F9F6EE;
+  margin: 25px;
+  padding: 10px 20px;
+  cursor: pointer;
+  font-size: 16px;
+  border-radius: 5px;
+}
+
+#viewership-btn:hover, #prizepool-btn:hover {
+  background-color: #536ead;
+  box-shadow: 1px 1px 5px #0008;
+}
+.graph-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  min-height: 400px; 
+}
+#viewership-graph,
+#prizepool-graph {
+  max-width: 900px; 
+  width: 100%;
+}
+
+#viewership-graph svg,
+#prizepool-graph svg {
+  border: 1px solid #aaa;
+}
+
+#viewership-graph path,
+#prizepool-graph path {
+  filter: drop-shadow(0 0 4px #0008);
+}
+
+#viewership-graph circle,
+#prizepool-graph circle {
+  stroke-width: 1px;
+  transition: r 0.2s;
+}
+
+#viewership-graph .tick text,
+#prizepool-graph .tick text {
+  fill: #fff;           
+  font-size: 14px;
+}
+
+#viewership-graph .domain,
+#prizepool-graph .domain,
+#viewership-graph .tick line,
+#prizepool-graph .tick line {
+  stroke: #aaa;         
+}
+
+#viewership-graph text,
+#prizepool-graph text {
+  fill: #fff;           
+  font-size: 14px;
+  font-weight: bold;
+  pointer-events: none;
+  text-shadow: 0 0 4px #0008;
+
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+
+}
