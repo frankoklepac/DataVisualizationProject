@@ -5,96 +5,208 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>League Worlds History</title>
     <link rel="stylesheet" href="style/style.css">
-    <script src="https://d3js.org/d3.v3.min.js"></script>
+    <link rel="stylesheet" href="style/world.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
 <body>
-    <a href="player_nationalities.html">Player nationalities</a>
-    <h1>Finals Data</h1>
-    <div id="data-table"></div>
-
-    <h1>Player Stats 2024</h1>
-    <div id="player-stats-table"></div>
-
-    <h1>Players attending Worlds</h1>
-    <div id="players-attending"></div>
-
-
+    <div class="header">
+        <div>
+            <h1>League of Legends World Championship History</h1>
+        </div>
+        <div class="header-nav">
+            <ul>
+                <li><a href="index.html">Homepage</a></li>
+                <li><a href="statistics.html">Statistics</a></li>
+                <li><a href="source.html">Source</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+    <svg id="map" width="100%" height="calc(75vh)" style="background: #10182b;"></svg>
+    </div>
+    <div class="footer">
+            <p>Created by <a href="https://github.com/https://github.com/frankoklepac">F.K.</a></p>
+    </div>
     <script>
-    const columnNameMapping = {
-        "Champion": "Champion Name",
-        "Games": "Total Games",
-        "PickBan_Rate": "Pick/Ban Rate",
-        "Banned": "Times Banned",
-        "Played": "Times Played",
-        "Wins": "Wins",
-        "Loses": "Losses",
-        "Win_Rate": "Win Rate",
-        "Kills": "Kills",
-        "Deaths": "Deaths",
-        "Assists": "Assists",
-        "KDA": "KDA",
-        "Team_Name": "Team Name",
-        "Player_Name": "Player Name",
-        "Champions_Played": "Champions Played",
-        "Winner_Team":"Winner",
-        "Runner_Up_Team":"Runner-Up",
-        "Prize_Pool":"Prize Pool ($)",
-        "Nation":"Nationality",
-        "Number_of_Players":"Total player count"
-    };
+        const svg = d3.select("#map");
+        const width = parseInt(svg.style("width"));
+        const height = 600;
 
-    function createTable(data, tableId) {
-        var table = d3.select(tableId).append("table");
-        var thead = table.append("thead");
-        var tbody = table.append("tbody");
+        const projection = d3.geoNaturalEarth1()
+            .scale(width / 8)
+            .translate([width / 2, height / 2]);
 
-        thead.append("tr")
-            .selectAll("th")
-            .data(d3.keys(data[0]))
-            .enter()
-            .append("th")
-            .text(function(d) { return columnNameMapping[d] || d; })
-            .on("click", function(d) {
-                const ascending = d3.select(this).classed("ascending");
-                const isNumeric = !isNaN(parseFloat(data[0][d]));
-                rows.sort(function(a, b) {
-                    if (isNumeric) {
-                        return ascending ? d3.ascending(+a[d], +b[d]) : d3.descending(+a[d], +b[d]);
-                    }
-                    return ascending
-                        ? d3.ascending(a[d], b[d])
-                        : d3.descending(a[d], b[d]);
-                });
-                d3.select(this).classed("ascending", !ascending);
+        const path = d3.geoPath().projection(projection);
+
+        const cityCoords = {
+            "Jönköping": [14.1618, 57.7826],
+            "Los Angeles": [-118.2437, 34.0522],
+            "Seoul": [126.9780, 37.5665],
+            "Berlin": [13.4050, 52.5200],
+            "Beijing": [116.4074, 39.9042],
+            "Incheon": [126.7052, 37.4563],
+            "Paris": [2.3522, 48.8566],
+            "Shanghai": [121.4737, 31.2304],
+            "Reykjavík": [-21.8174, 64.1265],
+            "San Francisco": [-122.4194, 37.7749],
+            "London": [-0.1276, 51.5074]
+        };
+
+        const cityToCountry = {
+            "Jönköping": "Sweden",
+            "Los Angeles": "United States of America",
+            "Seoul": "South Korea",
+            "Berlin": "Germany",
+            "Beijing": "China",
+            "Incheon": "South Korea",
+            "Paris": "France",
+            "Shanghai": "China",
+            "Reykjavík": "Iceland",
+            "San Francisco": "United States of America",
+            "London": "United Kingdom"
+        };
+
+        Promise.all([
+            d3.json("geojson/custom_no_guiana.geo.json"),
+            d3.csv("data/finals.csv")
+        ]).then(([geoData, finalsData]) => {
+            const uniqueCities = Array.from(new Set(finalsData.map(d => d.City)));
+            const hostCountries = new Set(uniqueCities.map(city => cityToCountry[city]));
+
+            const finalsPerCountry = {};
+            finalsData.forEach(d => {
+            const country = cityToCountry[d.City];
+            if (country) {
+                finalsPerCountry[country] = (finalsPerCountry[country] || 0) + 1;
+            }
             });
 
-        var rows = tbody.selectAll("tr")
-            .data(data)
-            .enter()
-            .append("tr");
+            const finalsPerCity = {};
+            finalsData.forEach(d => {
+            if (d.City) {
+                finalsPerCity[d.City] = (finalsPerCity[d.City] || 0) + 1;
+            }
+            });
 
-        rows.selectAll("td")
-            .data(function(row) {
-                return d3.values(row);
+            const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("position", "absolute")
+            .style("background", "#222")
+            .style("color", "#fff")
+            .style("padding", "6px 12px")
+            .style("border-radius", "6px")
+            .style("pointer-events", "none")
+            .style("opacity", 0);
+
+            const baseColor = "#2a9d8f";      
+            const neutralColor = "#1a2746";   
+            const hoverColor = "#38c1a6";     
+
+            const countryPaths = svg.append("g")
+            .selectAll("path")
+            .data(geoData.features)
+            .join("path")
+            .attr("d", path)
+            .attr("fill", d => hostCountries.has(d.properties.name) ? baseColor : neutralColor)
+            .attr("stroke", "none")
+            .style("cursor", d => hostCountries.has(d.properties.name) ? "pointer" : "default")
+            .on("mouseover", function(event, d) {
+                if (hostCountries.has(d.properties.name)) {
+                d3.select(this).attr("fill", hoverColor);
+                const finals = finalsPerCountry[d.properties.name] || 0;
+                tooltip.transition().duration(150).style("opacity", 0.95);
+                tooltip.html(`<strong>${d.properties.name}</strong><br/>Finals: ${finals}`)
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+                }
             })
-            .enter()
-            .append("td")
-            .text(function(d) { return d; });
-    }
+            .on("mousemove", function(event, d) {
+                if (hostCountries.has(d.properties.name)) {
+                tooltip.style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                }
+            })
+            .on("mouseout", function(event, d) {
+                if (hostCountries.has(d.properties.name)) {
+                d3.select(this).attr("fill", baseColor);
+                tooltip.transition().duration(150).style("opacity", 0);
+                }
+            })
+            .on("click", function(event, d) {
+                if (!hostCountries.has(d.properties.name)) return;
 
-    d3.csv("data/finals.csv", function(data) {
-        createTable(data, "#data-table");
-    });
+                const citiesInCountry = uniqueCities.filter(city => cityToCountry[city] === d.properties.name && cityCoords[city]);
+                cityDots.attr("opacity", city => (citiesInCountry.includes(city.name) ? 1 : 0));
 
-    d3.csv("data/player_stats_2024.csv", function(data) {
-        createTable(data, "#player-stats-table");
-    });
+                const [[x0, y0], [x1, y1]] = path.bounds(d);
+                const dx = x1 - x0;
+                const dy = y1 - y0;
+                const x = (x0 + x1) / 2;
+                const y = (y0 + y1) / 2;
+                const scale = Math.max(1, Math.min(8, 0.9 / Math.max(dx / width, dy / height)));
+                const translate = [width / 2 - scale * x, height / 2 - scale * y];
 
-    d3.csv("data/player_nationalities.csv", function(data) {
-        createTable(data, "#players-attending");
-    });
+                svg.transition().duration(750).call(
+                zoom.transform,
+                d3.zoomIdentity
+                    .translate(translate[0], translate[1])
+                    .scale(scale)
+                );
 
+                event.stopPropagation();
+            });
 
+            const hostCities = uniqueCities
+            .filter(city => cityCoords[city])
+            .map(city => ({
+                name: city,
+                coords: cityCoords[city]
+            }));
+
+            const cityDots = svg.append("g")
+            .selectAll("circle")
+            .data(hostCities)
+            .join("circle")
+            .attr("cx", d => projection(d.coords)[0])
+            .attr("cy", d => projection(d.coords)[1])
+            .attr("r", 1)
+            .attr("fill", "#ffd700")
+            .attr("stroke", "#fff")
+            .attr("stroke-width", 1)
+            .attr("opacity", 0)
+            .style("cursor", "pointer")
+            .on("mouseover", function(event, d) {
+                d3.select(this).attr("fill", "#fff176");
+                const finals = finalsPerCity[d.name] || 0;
+                tooltip.transition().duration(150).style("opacity", 0.95);
+                tooltip.html(`<strong>${d.name}</strong><br/>Finals: ${finals}`)
+                .style("left", (event.pageX + 10) + "px")
+                .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mousemove", function(event) {
+                tooltip.style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            })
+            .on("mouseout", function(event, d) {
+                d3.select(this).attr("fill", "#ffd700");
+                tooltip.transition().duration(150).style("opacity", 0);
+            });
+
+            const zoom = d3.zoom()
+            .scaleExtent([1, 8])
+            .on("zoom", (event) => {
+                svg.selectAll("g").attr("transform", event.transform);
+            });
+
+            svg.call(zoom);
+
+            svg.on("click", function(event) {
+            if (event.target.tagName === "svg") {
+                svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
+                cityDots.attr("opacity", 0);
+            }
+            });
+        });
     </script>
 </body>
 </html>
