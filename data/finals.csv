@@ -1,15 +1,15 @@
-Season,City,Prize_Pool,Winner_Team,Runner_Up_Team,Score,MVP
-Season 1,Jönköping,99.500,Fnatic,against All authority,2-1,Shushei
-Season 2,Los Angeles,2.000.000,Taipei Assasins,Azubu Frost,3-1,N/A
-Season 3,Los Angeles,2.050.000,T1, Royal Club,3-0,N/A
-Season 4,Seoul,2.130.000,Samsung Galaxy,Royal Club,3-1,Mata
-Season 5,Berlin,2.130.000,T1,KOO Tigers,3-1,MaRin
-Season 6,Los Angeles,5.070.000,T1,Samsung Galaxy,3-2,Faker
-Season 7,Beijing,4.596.591,Samsung Galaxy,T1,3-0,Ruler
-Season 8,Incheon,6.450.000,Invictus Gaming,Fnatic,3-0,Ning
-Season 9,Paris,2.225.000,FunPlus Phoenix,G2 Esports,3-0,Tian
-Season 10,Shanghai,2.225.000,DWG KIA,Suning,3-1,Canyon
-Season 11,Reykjavík,2.225.000,EDward Gaming,DWG KIA,3-2,Scout
-Season 12,San Francisco,2.225.000,DRX,T1,3-2,Kingen
-Season 13,Seoul,2.225.000,T1,Weibo Gaming,3-0,Zeus
-Season 14,London,2.225.000,T1,Bilibili Gaming,3-2,Faker
+Season,City,Prize_Pool,Peak_Viewers,Winner_Team,Runner_Up_Team,Score,MVP
+Season 1,Jönköping,210.069,99.500,Fnatic,against All authority,2-1,Shushei
+Season 2,Los Angeles,1.100.000,2.000.000,Taipei Assasins,Azubu Frost,3-1,N/A
+Season 3,Los Angeles,8.500.000,2.050.000,T1, Royal Club,3-0,N/A
+Season 4,Seoul,11.000.000,2.130.000,Samsung Galaxy,Royal Club,3-1,Mata
+Season 5,Berlin,14.000.000,2.130.000,T1,KOO Tigers,3-1,MaRin
+Season 6,Los Angeles,14.700.000,5.070.000,T1,Samsung Galaxy,3-2,Faker
+Season 7,Beijing,2.101.737,4.596.591,Samsung Galaxy,T1,3-0,Ruler
+Season 8,Incheon,2.040.118,6.450.000,Invictus Gaming,Fnatic,3-0,Ning
+Season 9,Paris,3.981.706,2.225.000,FunPlus Phoenix,G2 Esports,3-0,Tian
+Season 10,Shanghai,3.884.667,2.225.000,DWG KIA,Suning,3-1,Canyon
+Season 11,Reykjavík,4.018.728,2.225.000,EDward Gaming,DWG KIA,3-2,Scout
+Season 12,San Francisco,5.147.701,2.225.000,DRX,T1,3-2,Kingen
+Season 13,Seoul,6.400.000,2.225.000,T1,Weibo Gaming,3-0,Zeus
+Season 14,London,6.900.000,2.225.000,T1,Bilibili Gaming,3-2,Faker
