@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Top Players All Time</title>
+  <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="style/topplayers.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+  <div class="header">
+    <div>
+        <h1>League of Legends World Championship History</h1>
+    </div>
+    <div class="header-nav">
+        <ul>
+            <li><a href="index.html">Homepage</a></li>
+            <li><a href="statistics.html">Statistics</a></li>
+            <li><a href="source.html">Source</a></li>
+        </ul>
+    </div>
+  </div>
+  <div class="content">
+    <div class="top-players-header">
+      <h1>Top Players of All Time</h1>
+      <ul>
+        <li>Here you can find the stats for the top 15 players with the most games played in the League of Legends World Championship history.</li>
+        <li>Click on a column header to sort the table by that column.</li>
+        <li>Use the dropdowns to compare two players side by side.</li>
+      </ul>
+    </div>
+    <div class="top-players-content">
+      <div class="top-players-table">
+        <table id="player-table">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="top-players-selectors">
+        <div class="select-left-player">
+          <label for="left-player-select">First Player:</label>
+          <select id="left-player-select"></select>
+            <img id="left-player-photo" class="player-img" src="player_photos/default.png" alt="Player photo">
+            <table id="player-left-table" class="player-info">
+              <thead></thead>
+              <tbody></tbody>
+            </table>
+        </div>
+        <div class="select-right-player">
+          <label for="right-player-select">Second Player:</label>
+          <select id="right-player-select"></select>
+          <img id="right-player-photo" class="player-img" src="player_photos/default.png" alt="Player photo">
+          <table id="player-right-table" class="player-info">
+            <thead></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+  </div>
+
+  <script>
+    const columnNameMap = {
+      Player_Name: "Player",
+      Titles: "Titles",
+      Games_Played: "Games Played",
+      Wins: "Wins",
+      Losses: "Losses",
+      Win_Rate: "Win Rate",
+      Kills: "Kills",
+      Deaths: "Deaths",
+      Assists: "Assists",
+      KDA: "KDA",
+      Position: "Position"
+    };
+
+    d3.csv("data/top_10_all_time.csv").then(function(data) {
+      const columns = data.columns || Object.keys(data[0]);
+      const playerNames = data.map(d => d.Player_Name);
+      let sortKey = null;
+      let sortAscending = true;
+
+      const thead = d3.select("#player-table thead").append("tr");
+      columns.forEach(col => {
+        thead.append("th")
+          .text(columnNameMap[col] || col)
+          .attr("data-key", col)
+          .style("cursor", col !== "Player_Name" ? "pointer" : "default");
+      });
+
+      function renderTable(tableData) {
+        const tbody = d3.select("#player-table tbody");
+        tbody.html(""); 
+        tableData.forEach(row => {
+          const tr = tbody.append("tr");
+          columns.forEach(col => {
+            tr.append("td").text(row[col]);
+          });
+        });
+      }
+
+      renderTable(data);
+
+      d3.selectAll("#player-table th").on("click", function() {
+        const key = d3.select(this).attr("data-key");
+        if (key === "Player_Name") return; 
+
+        if (sortKey === key) {
+          sortAscending = !sortAscending;
+        } else {
+          sortKey = key;
+          sortAscending = true;
+        }
+
+        const sortedData = data.slice().sort((a, b) => {
+          let aValue = a[key];
+          let bValue = b[key];
+
+          if (!isNaN(parseFloat(aValue)) && !isNaN(parseFloat(bValue))) {
+            aValue = parseFloat(aValue);
+            bValue = parseFloat(bValue);
+          }
+
+          if (sortAscending) {
+            return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+          } else {
+            return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+          }
+        });
+
+        renderTable(sortedData);
+      });
+
+      function updateSelectors() {
+        const leftValue = d3.select("#left-player-select").property("value");
+        const rightValue = d3.select("#right-player-select").property("value");
+
+        const leftSelect = d3.select("#left-player-select");
+        leftSelect.selectAll("option").remove();
+        leftSelect.selectAll("option")
+          .data(playerNames.filter(name => name !== rightValue))
+          .enter()
+          .append("option")
+          .attr("value", d => d)
+          .text(d => d);
+
+        const rightSelect = d3.select("#right-player-select");
+        rightSelect.selectAll("option").remove();
+        rightSelect.selectAll("option")
+          .data(playerNames.filter(name => name !== leftValue))
+          .enter()
+          .append("option")
+          .attr("value", d => d)
+          .text(d => d);
+
+        if (leftValue && playerNames.includes(leftValue) && leftValue !== rightValue) {
+          leftSelect.property("value", leftValue);
+        }
+        if (rightValue && playerNames.includes(rightValue) && rightValue !== leftValue) {
+          rightSelect.property("value", rightValue);
+        }
+      }
+
+      function fillPlayerTable(playerName, tableId, imgSelector) {
+        const player = data.find(d => d.Player_Name === playerName);
+        const table = d3.select(tableId);
+        table.select("thead").html("");
+        table.select("tbody").html("");
+        if (!player) return;
+        Object.keys(columnNameMap).forEach(key => {
+          const row = table.select("tbody").append("tr");
+          row.append("td")
+            .style("text-align", "right")
+            .style("padding-right", "8px")
+            .html(`<b>${columnNameMap[key]}</b>`);
+          row.append("td")
+            .style("text-align", "left")
+            .style("padding-left", "8px")
+            .text(player[key]);
+        });
+        const imgPath = `player_photos/${playerName}.png`;
+        d3.select(imgSelector)
+          .attr("src", imgPath)
+          .attr("alt", playerName + " photo")
+          .on("error", function() {
+            d3.select(this).attr("src", "player_photos/default.png");
+          });
+      }
+
+      d3.select("#left-player-select").on("change", function() {
+        updateSelectors();
+        fillPlayerTable(this.value, "#player-left-table", "#left-player-photo");
+      });
+      d3.select("#right-player-select").on("change", function() {
+        updateSelectors();
+        fillPlayerTable(this.value, "#player-right-table", "#right-player-photo");
+      });
+
+      updateSelectors();
+      d3.select("#left-player-select").property("value", playerNames[0]);
+      d3.select("#right-player-select").property("value", playerNames[1]);
+      fillPlayerTable(playerNames[0], "#player-left-table", "#left-player-photo");
+      fillPlayerTable(playerNames[1], "#player-right-table", "#right-player-photo");
+    });
+</script>
+</body>
+</html>

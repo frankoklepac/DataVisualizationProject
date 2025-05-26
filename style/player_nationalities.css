@@ -1,3 +1,107 @@
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: #10182b;
+}
+
+.player-nationalities-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #F9F6EE;
+}
+
+.player-nationalities-header ul {
+    list-style: none;
+    padding: 5px;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
+}
+
+.player-nationalities-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.spacer {
+    width: 100%;
+    height: 30px;
+    margin: 20px;
+    background-color: #381A32;
+}
+
+.player-nationalities-chart, .region-chart {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#nationality-filters, #region-filters {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  background: #232b3a;
+  border-radius: 10px;
+  padding: 12px;
+  height: 100%;
+}
+
+#nationality-filters label, #region-filters label {
+  color: #f9f6ee;
+  font-size: 15px;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#nationality-filters input[type="checkbox"], #region-filters input[type="checkbox"] {
+  accent-color: #e9c46a;
+  width: 16px;
+  height: 16px;
+  margin-right: 4px;
+}
+
+#region-nationalities-list {
+  background: #232b3a;
+  border-radius: 10px;
+  padding: 16px 20px 12px 28px;
+  margin: 16px;
+  max-width: 400px;
+  color: #f9f6ee;
+  font-size: 15px;
+  box-shadow: 0 2px 12px #0002;
+  list-style-type: none;
+}
+
+#region-nationalities-list > li {
+  margin-bottom: 8px;
+  padding-left: 0;
+  position: relative;
+}
+
+#region-nationalities-list > li:before {
+  color: #e9c46a;
+  font-size: 18px;
+  position: absolute;
+  left: -18px;
+  top: 0;
+}
+
+
 .line {
     fill: none;
     stroke-width: 2px;
@@ -31,4 +135,24 @@
     font-size: 12px;
     pointer-events: none;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#chart svg text, #region-chart svg text {
+  font-size: 12px;
+  fill: #F9F6EE; 
+}
+
+#chart .domain, #region-chart .domain,
+#chart .tick line, #region-chart .tick line {
+  stroke: #F9F6EE;
+} 
+
+#chart .legend text, #region-chart .legend text {
+  font-size: 15px;
+  fill: #F9F6EE;
+}
+
+.axis-label {
+  font-size: 12px;
+  fill: #F9F6EE;
 }

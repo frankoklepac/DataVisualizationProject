@@ -9,16 +9,105 @@
     <link rel="stylesheet" href="style/player_nationalities.css">
 </head>
 <body>
-    <a href="index.html">Index</a>
-    <h1>Player Nationalities Trend Over Seasons</h1>
-    <div id="chart"></div>
+    <div class="header">
+        <div>
+            <h1>League of Legends World Championship History</h1>
+        </div>
+        <div class="header-nav">
+            <ul>
+                <li><a href="index.html">Homepage</a></li>
+                <li><a href="statistics.html">Statistics</a></li>
+                <li><a href="source.html">Source</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <div class="player-nationalities-header">
+            <h1>Player Nationalities Trend</h1>
+            <ul>
+                <li>This chart shows the trend of player nationalities in the League of Legends World Championship from Season 1 to Season 14 with at least 20 players
+                </li>
+                <li>
+                    Hover over a line to see the number of players from each nationality in that season.
+                </li>
+                <li>
+                    By using the slider you can see the chart progress over time.
+                </li>
+                <li>
+                    By using the checkboxes you can select which nationalities to display.
+                </li>
+            </ul>
+        </div>
+        <div class="player-nationalities-content">
+            <div class="player-nationalities-chart">
+                <div>
+                    <div class="slider-container" style="text-align:center; margin-top:20px;">
+                        <label for="season-slider" style="color:#f9f6ee;">Season: <span id="season-label">14</span></label>
+                        <input type="range" id="season-slider" min="1" max="14" value="14" step="1" style="width:300px;">
+                    </div>
+                    <div id="chart"></div>
+                </div>
+                <div id="nationality-filters"></div>
+            </div>
+            <div class="spacer"></div>
+            <div class="region-chart">
+                <div>
+                    <div class="slider-container" style="text-align:center; margin-top:20px;">
+                        <label for="region-season-slider" style="color:#f9f6ee;">Season: <span id="region-season-label">14</span></label>
+                        <input type="range" id="region-season-slider" min="1" max="14" value="14" step="1" style="width:300px;">
+                    </div>
+                    <div id="region-chart" style="margin-top:40px;"></div>
+                </div>
+                <div id="region-filters"></div>
+                <ul id="region-nationalities-list">
+                    <li>South Korea - South Korea</li>
+                    <li>China - China</li>
+                    <li>Asia-Pacific - Taiwanese, Vietnamese, Australian, Japanese</li>
+                    <li>Americas - Brazilian, Canadian, American</li>
+                    <li>Europe - Danish, German, Turkish, French, Spanish, Russian</li>
+            </div>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer">
+    </div>
 
     <script>
-        const margin = { top: 20, right: 150, bottom: 50, left: 50 };
+        const margin = { top: 20, right: 150, bottom: 70, left: 50 };
         const width = 800 - margin.left - margin.right;
         const height = 500 - margin.top - margin.bottom;
 
+        const countryToRegion = {
+            "South Korean" : "South Korea",
+            "Chinese" : "China",
+            "Taiwanese" : "Asia-Pacific",
+            "American" : "Americas",
+            "Vietnamese" : "Asia-Pacific",
+            "Danish" : "Europe",
+            "Brazilian" : "Americas",
+            "Canadian" : "Americas",
+            "German" : "Europe",
+            "Australian" : "Asia-Pacific",
+            "Turkish" : "Europe",
+            "French" : "Europe",
+            "Spanish" : "Europe",
+            "Russian" : "Europe",
+            "Japanese" : "Asia-Pacific",
+        };
+
+        const regionNames = ["South Korea", "China", "Asia-Pacific", "Americas", "Europe"];
         const verticalLines = ["Season1", "Season2", "Season3", "Season4", "Season5", "Season6", "Season7", "Season8", "Season9", "Season10", "Season11", "Season12", "Season13", "Season14"];
+
+        const regionFilterDiv = d3.select("#region-filters");
+        regionNames.forEach(region => {
+            regionFilterDiv.append("label")
+                .style("margin-right", "16px")
+                .html(`<input type="checkbox" class="region-checkbox" value="${region}" checked> ${region}`);
+        });
+        function getCheckedRegions() {
+            return Array.from(document.querySelectorAll('.region-checkbox:checked')).map(cb => cb.value);
+        }
 
         const svg = d3.select("#chart")
             .append("svg")
@@ -26,8 +115,8 @@
             .attr("height", height + margin.top + margin.bottom)
             .append("g")
             .attr("transform", `translate(${margin.left},${margin.top})`);
-        
-            const tooltip = d3.select("body")
+
+        const tooltip = d3.select("body")
             .append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
@@ -39,6 +128,17 @@
                 values: seasons.map(season => ({
                     season: season,
                     players: +row[season]
+                }))
+            }));
+
+            const regionData = regionNames.map(region => ({
+                region: region,
+                values: seasons.map(season => ({
+                    season: season,
+                    players: d3.sum(parsedData.filter(d => countryToRegion[d.nation] === region), d => {
+                        const val = d.values.find(v => v.season === season);
+                        return val ? val.players : 0;
+                    })
                 }))
             }));
 
@@ -61,50 +161,32 @@
                 .call(d3.axisLeft(yScale));
 
             svg.append("g")
-            .attr("class", "grid")
-            .selectAll("line")
-            .data(yScale.ticks()) 
-            .enter()
-            .append("line")
-            .attr("x1", 0) 
-            .attr("x2", width) 
-            .attr("y1", d => yScale(d)) 
-            .attr("y2", d => yScale(d)) 
-            .attr("stroke", "#ccc") 
-            .attr("stroke-dasharray", "4,4"); 
+                .attr("class", "grid")
+                .selectAll("line")
+                .data(yScale.ticks())
+                .enter()
+                .append("line")
+                .attr("x1", 0)
+                .attr("x2", width)
+                .attr("y1", d => yScale(d))
+                .attr("y2", d => yScale(d))
+                .attr("stroke", "#ccc")
+                .attr("stroke-dasharray", "4,4");
 
             const color = d3.scaleOrdinal(d3.schemeCategory10);
 
-            svg.selectAll(".line")
-                .data(parsedData)
+            svg.selectAll(".vertical-line")
+                .data(verticalLines)
                 .enter()
-                .append("path")
-                .attr("class", "line")
-                .attr("d", d => d3.line()
-                    .x(v => xScale(v.season))
-                    .y(v => yScale(v.players))(d.values)
-                )
-                .attr("stroke", d => color(d.nation))
-                .attr("stroke-width", 2)
-                .attr("fill", "none")
-                .on("mouseover", function(event, d) {
-                    d3.selectAll(".line").classed("dimmed", true); 
-                    d3.select(this).classed("dimmed", false).classed("highlighted", true);  
-
-                    tooltip.transition().duration(200).style("opacity", 1);
-                    tooltip.html(d.nation) 
-                        .style("left", (event.pageX + 10) + "px") 
-                        .style("top", (event.pageY - 20) + "px");
-                })
-                .on("mousemove", function(event) {
-                    tooltip.style("left", (event.pageX + 10) + "px")
-                        .style("top", (event.pageY - 20) + "px");
-                })
-                .on("mouseout", function() {
-                    d3.selectAll(".line").classed("dimmed", false).classed("highlighted", false);
-                    tooltip.transition().duration(200).style("opacity", 0);
-                });
-                
+                .append("line")
+                .attr("class", "vertical-line")
+                .attr("x1", d => xScale(d))
+                .attr("x2", d => xScale(d))
+                .attr("y1", 0)
+                .attr("y2", height)
+                .attr("stroke", "#ccc")
+                .attr("stroke-dasharray", "4,4")
+                .attr("stroke-width", 1);
 
             const legend = svg.selectAll(".legend")
                 .data(parsedData)
@@ -127,7 +209,106 @@
                 .style("font-size", "12px")
                 .attr("alignment-baseline", "middle");
 
-            svg.selectAll(".vertical-line")
+            const allNations = parsedData.map(d => d.nation);
+            const filterDiv = d3.select("#nationality-filters");
+            allNations.forEach(nation => {
+                filterDiv.append("label")
+                    .style("margin-right", "16px")
+                    .html(`<input type="checkbox" class="nation-checkbox" value="${nation}" checked> ${nation}`);
+            });
+
+            function getCheckedNations() {
+                return Array.from(document.querySelectorAll('.nation-checkbox:checked')).map(cb => cb.value);
+            }
+
+            function drawLines(uptoSeason, nationsToShow) {
+                svg.selectAll(".line").remove();
+                svg.selectAll(".line")
+                    .data(parsedData.filter(d => nationsToShow.includes(d.nation)))
+                    .enter()
+                    .append("path")
+                    .attr("class", "line")
+                    .attr("d", d => d3.line()
+                        .x(v => xScale(v.season))
+                        .y(v => yScale(v.players))(
+                            d.values.slice(0, uptoSeason)
+                        )
+                    )
+                    .attr("stroke", d => color(d.nation))
+                    .attr("stroke-width", 2)
+                    .attr("fill", "none")
+                    .on("mousemove", function(event, d) {
+                        const [mx] = d3.pointer(event, this);
+                        const seasons = d.values.slice(0, uptoSeason);
+                        const xVals = seasons.map(v => xScale(v.season));
+                        const distances = xVals.map(x => Math.abs(x - mx));
+                        const minIndex = distances.indexOf(Math.min(...distances));
+                        const seasonData = seasons[minIndex];
+
+                        d3.selectAll(".line").classed("dimmed", true);
+                        d3.select(this).classed("dimmed", false).classed("highlighted", true);
+                        tooltip.transition().duration(100).style("opacity", 1);
+                        tooltip.html(
+                            `<b>${d.nation}</b><br>Season: <b>${seasonData.season.replace("Season", "")}</b><br>Players: <b>${seasonData.players}</b>`
+                        )
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 20) + "px");
+                    })
+                    .on("mouseout", function() {
+                        d3.selectAll(".line").classed("dimmed", false).classed("highlighted", false);
+                        tooltip.transition().duration(200).style("opacity", 0);
+                    });
+            }
+
+            let currentSeason = 14;
+            let regionCurrentSeason = 14;
+            drawLines(currentSeason, getCheckedNations());
+
+            d3.select("#season-slider").on("input", function() {
+                currentSeason = +this.value;
+                d3.select("#season-label").text(currentSeason);
+                drawLines(currentSeason, getCheckedNations());
+            });
+
+            d3.selectAll('.nation-checkbox').on("change", function() {
+                drawLines(currentSeason, getCheckedNations());
+            });
+
+            const svgRegion = d3.select("#region-chart")
+                .append("svg")
+                .attr("width", width + margin.left + margin.right)
+                .attr("height", height + margin.top + margin.bottom)
+                .append("g")
+                .attr("transform", `translate(${margin.left},${margin.top})`);
+
+            const regionColor = d3.scaleOrdinal()
+                .domain(regionNames)
+                .range(["#e63946", "#457b9d", "#f4a261", "#2a9d8f", "#a29bfe"]);
+
+            svgRegion.append("g")
+                .attr("transform", `translate(0,${height})`)
+                .call(d3.axisBottom(xScale))
+                .selectAll("text")
+                .attr("transform", "rotate(-45)")
+                .style("text-anchor", "end");
+
+            svgRegion.append("g")
+                .call(d3.axisLeft(yScale));
+
+            svgRegion.append("g")
+                .attr("class", "grid")
+                .selectAll("line")
+                .data(yScale.ticks())
+                .enter()
+                .append("line")
+                .attr("x1", 0)
+                .attr("x2", width)
+                .attr("y1", d => yScale(d))
+                .attr("y2", d => yScale(d))
+                .attr("stroke", "#ccc")
+                .attr("stroke-dasharray", "4,4");
+
+            svgRegion.selectAll(".vertical-line")
                 .data(verticalLines)
                 .enter()
                 .append("line")
@@ -136,12 +317,58 @@
                 .attr("x2", d => xScale(d))
                 .attr("y1", 0)
                 .attr("y2", height)
-                .attr("stroke", "#ccc") 
-                .attr("stroke-dasharray", "4,4") 
+                .attr("stroke", "#ccc")
+                .attr("stroke-dasharray", "4,4")
                 .attr("stroke-width", 1);
-        });
 
-        
+            function drawRegionLines(uptoSeason) {
+                svgRegion.selectAll(".region-line").remove();
+                svgRegion.selectAll(".region-line")
+                    .data(regionData.filter(d => getCheckedRegions().includes(d.region)))
+                    .enter()
+                    .append("path")
+                    .attr("class", "region-line")
+                    .attr("d", d => d3.line()
+                        .x(v => xScale(v.season))
+                        .y(v => yScale(v.players))(
+                            d.values.slice(0, uptoSeason)
+                        )
+                    )
+                    .attr("stroke", d => regionColor(d.region))
+                    .attr("stroke-width", 3)
+                    .attr("fill", "none")
+                    .on("mousemove", function(event, d) {
+                        const [mx] = d3.pointer(event, this);
+                        const seasons = d.values.slice(0, uptoSeason);
+                        const xVals = seasons.map(v => xScale(v.season));
+                        const distances = xVals.map(x => Math.abs(x - mx));
+                        const minIndex = distances.indexOf(Math.min(...distances));
+                        const seasonData = seasons[minIndex];
+
+                        tooltip.transition().duration(100).style("opacity", 1);
+                        tooltip.html(
+                            `<b>${d.region}</b><br>Season: <b>${seasonData.season.replace("Season", "")}</b><br>Players: <b>${seasonData.players}</b>`
+                        )
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 20) + "px");
+                    })
+                    .on("mouseout", function() {
+                        tooltip.transition().duration(200).style("opacity", 0);
+                    });
+            }
+
+            drawRegionLines(regionCurrentSeason);
+
+            d3.select("#region-season-slider").on("input", function() {
+                regionCurrentSeason = +this.value;
+                d3.select("#region-season-label").text(regionCurrentSeason);
+                drawRegionLines(regionCurrentSeason);
+            });
+
+            d3.selectAll('.region-checkbox').on("change", function() {
+                drawRegionLines(regionCurrentSeason);
+            });
+        });
     </script>
 </body>
 </html>

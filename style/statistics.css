@@ -43,3 +43,9 @@
 .stat-block p {
   margin-bottom: 0;
 }
+
+.statistics-content .stat-block:nth-child(5) {
+  grid-column: 1 / span 2; 
+  justify-self: center;    
+  width: 60%;
+}

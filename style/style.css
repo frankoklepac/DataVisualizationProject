@@ -65,3 +65,8 @@ body {
     justify-content: center;
     align-items: center;
 }
+
+.footer a {
+    text-decoration: none;
+    color: #F9F6EE;
+}
