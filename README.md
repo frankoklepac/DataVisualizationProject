@@ -1,1 +1,2 @@
-# DataVisualizationProject
+## Data Visualization project repository
+
