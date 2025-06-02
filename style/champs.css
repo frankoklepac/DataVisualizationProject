@@ -9,7 +9,7 @@
 }
 
 .table-container {
-    max-width: 900px;
+    width: 1200px;
     margin: 20px auto;
     overflow-x: auto;
 }
@@ -31,6 +31,7 @@ th {
     position: sticky;
     top: 0;
     z-index: 1;
+    cursor: pointer;
 }
 img.champion-icon {
     width: 25px;
