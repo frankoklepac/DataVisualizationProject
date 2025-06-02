@@ -1,0 +1,10 @@
+Year,City,Phase,Match ID,Team 1,Team 2,Team 1 Score,Team 2 Score,Winner,Date,Next Match ID
+2017,Beijing,Group Stage,1,G2 Esports,Samsung Galaxy,0,1,Samsung Galaxy,2017-10-05,2
+2017,Beijing,Group Stage,2,Samsung Galaxy,Royal Never Give Up,0,1,Royal Never Give Up,2017-10-07,3
+2017,Beijing,Group Stage,3,FB,Samsung Galaxy,0,1,Samsung Galaxy,2017-10-08,4
+2017,Beijing,Group Stage,4,Samsung Galaxy,FB,1,0,Samsung Galaxy,2017-10-13,5
+2017,Beijing,Group Stage,5,Samsung Galaxy,G2 Esports,1,0,Samsung Galaxy,2017-10-13,6
+2017,Beijing,Group Stage,6,Royal Never Give Up,Samsung Galaxy,1,0,Royal Never Give Up,2017-10-13,7
+2017,Beijing,Quarterfinals,7,Longzhu Gaming,Samsung Galaxy,0,3,Samsung Galaxy,2017-10-19,8
+2017,Beijing,Semifinals,8,Samsung Galaxy,Team WE,3,1,Samsung Galaxy,2017-10-29,9
+2017,Beijing,Finals,9,T1,Samsung Galaxy,0,3,Samsung Galaxy,2017-11-04,""

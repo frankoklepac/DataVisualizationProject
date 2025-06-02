@@ -1,0 +1,8 @@
+Year,City,Phase,Match ID,Team 1,Team 2,Team 1 Score,Team 2 Score,Winner,Date,Next Match ID
+2011,Jönköping,Group Stage,1,Fnatic,Team Pacific,1,0,Fnatic,2011-06-18,2
+2011,Jönköping,Group Stage,2,against All authority,Fnatic,1,0,against All authority,2011-06-18,3
+2011,Jönköping,Group Stage,3,Epik Gamer,Fnatic,1,0,Epik Gamer,2011-06-18,4
+2011,Jönköping,Group Stage,4,Counter Logic Gaming,Fnatic,1,2,Fnatic,2011-06-19,5
+2011,Jönköping,Quarterfinals,5,Epik Gamer,Fnatic,0,2,Fnatic,2011-06-19,6
+2011,Jönköping,Semifinals,6,against All authority,Fnatic,0,2,Fnatic,2011-06-20,7
+2011,Jönköping,Finals,7,Fnatic,against All authority,2,1,Fnatic,2011-06-20,""

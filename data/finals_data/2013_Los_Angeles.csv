@@ -1,0 +1,12 @@
+Year,City,Phase,Match ID,Team 1,Team 2,Team 1 Score,Team 2 Score,Winner,Date,Next Match ID
+2013,Los Angeles,Group Stage,1,T1,Lemondogs,1,0,T1,2013-09-15,2
+2013,Los Angeles,Group Stage,2,Oh My God,T1,1,0,Oh My God,2013-09-16,3
+2013,Los Angeles,Group Stage,3,T1,GamingGear.eu,1,0,T1,2013-09-18,4
+2013,Los Angeles,Group Stage,4,T1,Team SoloMid,1,0,T1,2013-09-18,5
+2013,Los Angeles,Group Stage,5,Lemondogs,T1,0,1,T1,2013-09-21,6
+2013,Los Angeles,Group Stage,6,Team SoloMid,T1,0,1,T1,2013-09-21,7
+2013,Los Angeles,Group Stage,7,GamingGear.eu,T1,0,1,T1,2013-09-22,8
+2013,Los Angeles,Group Stage,8,T1,Oh My God,1,0,T1,2013-09-22,9
+2013,Los Angeles,Quarterfinals,9,Gamania Bears,T1,0,2,T1,2013-09-23,10
+2013,Los Angeles,Semifinals,10,T1,NaJin Black Sword,3,2,T1,2013-09-28,11
+2013,Los Angeles,Finals,11,T1,Royal Club,3,0,T1,2013-10-05,""

@@ -1,0 +1,8 @@
+Year,City,Phase,Match ID,Team 1,Team 2,Team 1 Score,Team 2 Score,Winner,Date,Next Match ID
+2024,London,Group Stage,1,Top Esports,T1,1,0,Top Esports,2024-10-03,2
+2024,London,Group Stage,2,T1,Pain Gaming,1,0,T1,2024-10-04,3
+2024,London,Group Stage,3,Bilibili Gaming,T1,0,1,T1,2024-10-06,4
+2024,London,Group Stage,4,G2 Esports,T1,0,2,T1,2024-10-11,5
+2024,London,Quarterfinals,5,Top Esports,T1,0,3,T1,2024-10-19,6
+2024,London,Semifinals,6,T1,Gen.G,3,1,T1,2024-10-27,7
+2024,London,Finals,7,Bilibili Gaming,T1,2,3,T1,2024-11-02,""

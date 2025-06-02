@@ -1,0 +1,8 @@
+Year,City,Phase,Match ID,Team 1,Team 2,Team 1 Score,Team 2 Score,Winner,Date,Next Match ID
+2023,Seoul,Group Stage,1,T1, Teal Liquid,1,0,T1,2023-10-19,2
+2023,Seoul,Group Stage,2,Gen.G,T1,1,0,Gen.G,2023-10-20,3
+2023,Seoul,Group Stage,3,T1,Cloud9,1,0,T1,2023-10-22,4
+2023,Seoul,Group Stage,4,T1,Bilibili Gaming,2,0,T1,2023-10-28,5
+2023,Seoul,Quarterfinals,5,LNG Gaming, T1, 0, 3, T1,2023-11-05,6
+2023,Seoul,Semifinals,6,JDG Gaming ,T1,1,3,T1,2023-11-12,7
+2023,Seoul,Finals,7,Weibo Gaming,T1,0,3,T1,2023-11-19,""

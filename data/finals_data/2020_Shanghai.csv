@@ -1,0 +1,10 @@
+Year,City,Phase,Match ID,Team 1,Team 2,Team 1 Score,Team 2 Score,Winner,Date,Next Match ID
+2020,Shanghai,Group Stage,1,DWG KIA,JDG,1,0,DWG KIA,2020-10-03,2
+2020,Shanghai,Group Stage,2,Rogue,DWG KIA,0,1,DWG KIA,2020-10-04,3
+2020,Shanghai,Group Stage,3,DWG KIA,PSG Talon,1,0,DWG KIA,2020-10-05,4
+2020,Shanghai,Group Stage,4,PSG Talon,DWG KIA,0,1,DWG KIA,2020-10-09,5
+2020,Shanghai,Group Stage,5,DWG KIA,Rogue,1,0,DWG KIA,2020-10-09,6
+2020,Shanghai,Group Stage,6,JDG,DWG KIA,1,0,JDG,2020-10-09,7
+2020,Shanghai,Quarterfinals,7,DWG KIA,DRX,3,0,DWG KIA,2020-10-15,8
+2020,Shanghai,Semifinals,8,G2 Esports,DWG KIA,1,3,DWG KIA,2020-10-24,9
+2020,Shanghai,Finals,9,Suning,DWG KIA,1,3,DWG KIA,2020-10-31,""

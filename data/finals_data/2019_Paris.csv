@@ -1,0 +1,10 @@
+Year,City,Phase,Match ID,Team 1,Team 2,Team 1 Score,Team 2 Score,Winner,Date,Next Match ID
+2019,Paris,Group Stage,1,JT,FunPlus Phoenix,1,0,JT,2019-10-12,2
+2019,Paris,Group Stage,2,FunPlus Phoenix,Splyce,1,0,FunPlus Phoenix,2019-10-14,3
+2019,Paris,Group Stage,3,FunPlus Phoenix,GAM Esports,1,0,FunPlus Phoenix,2019-10-15,4
+2019,Paris,Group Stage,4,GAM Esports,FunPlus Phoenix,0,1,FunPlus Phoenix,2019-10-17,5
+2019,Paris,Group Stage,5,Splyce,FunPlus Phoenix,1,0,FunPlus Phoenix,2019-10-17,6
+2019,Paris,Group Stage,6,FunPlus Phoenix,JT,1,0,FunPlus Phoenix,2019-10-17,7
+2019,Paris,Quarterfinals,7,FunPlus Phoenix,Fnatic,3,1,FunPlus Phoenix,2019-10-26,8
+2019,Paris,Semifinals,8,Invictus Gaming,FunPlus Phoenix,1,3,FunPlus Phoenix,2019-11-02,9
+2019,Paris,Finals,9,G2 Esports,FunPlus Phoenix,0,3,FunPlus Phoenix,2019-11-10,""

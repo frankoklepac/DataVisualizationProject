@@ -1,0 +1,10 @@
+Year,City,Phase,Match ID,Team 1,Team 2,Team 1 Score,Team 2 Score,Winner,Date,Next Match ID
+2016,Los Angeles,Group Stage,1,T1,Cloud9,1,0,T1,2016-10-01,2
+2016,Los Angeles,Group Stage,2,Immortals,T1,0,1,T1,2016-10-02,3
+2016,Los Angeles,Group Stage,3,T1,Flash Wolves,0,1,Flash Wolves,2016-10-03,4
+2016,Los Angeles,Group Stage,4,Cloud9,T1,0,1,T1,2016-10-09,5
+2016,Los Angeles,Group Stage,5,T1,Immortals,1,0,T1,2016-10-10,6
+2016,Los Angeles,Group Stage,6,Flash Wolves,T1,0,1,T1,2016-10-10,7
+2016,Los Angeles,Quarterfinals,7,T1, Royal Never Give Up,3,1,T1,2016-10-15,8
+2016,Los Angeles,Semifinals,8,T1, Rox Tigers,3,2,T1,2016-10-22,9
+2016,Los Angeles,Finals,9,T1,Samsung Galaxy,3,2,T1,2016-10-30,""

@@ -1,0 +1,10 @@
+Year,City,Phase,Match ID,Team 1,Team 2,Team 1 Score,Team 2 Score,Winner,Date,Next Match ID
+2018,Incheon,Group Stage,1,Invictus Gaming,GRX,1,0,Invictus Gaming,2018-10-11,2
+2018,Incheon,Group Stage,2,Fnatic,Invictus Gaming,0,1,Invictus Gaming,2018-10-12,3
+2018,Incheon,Group Stage,3,Invictus Gaming,100Thieves,1,0,Invictus Gaming,2018-10-13,4
+2018,Incheon,Group Stage,4,GRX,Invictus Gaming,0,1,Invictus Gaming,2018-10-17,5
+2018,Incheon,Group Stage,5,100Thieves,Invictus Gaming,0,1,Invictus Gaming,2018-10-17,6
+2018,Incheon,Group Stage,6,Invictus Gaming,Fnatic,0,1,Fnatic,2018-10-17,7
+2018,Incheon,Quarterfinals,7,KT Rolster,Invictus Gaming,2,3,Invictus Gaming,2018-10-20,8
+2018,Incheon,Semifinals,8,G2 Esports,Invictus Gaming,0,3,Invictus Gaming,2018-10-27,9
+2018,Incheon,Finals,9,Fnatic,Invictus Gaming,0,3,Invictus Gaming,2018-11-03,""

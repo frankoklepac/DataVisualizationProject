@@ -1,0 +1,10 @@
+Year,City,Phase,Match ID,Team 1,Team 2,Team 1 Score,Team 2 Score,Winner,Date,Next Match ID
+2015,Berlin,Group Stage,1,T1,H2K,1,0,T1,2015-10-01,2
+2015,Berlin,Group Stage,2,BKT,T1,0,1,T1,2015-10-02,3
+2015,Berlin,Group Stage,3,EDward Gaming,T1,0,1,T1,2015-10-03,4
+2015,Berlin,Group Stage,4,T1,EDward Gaming,1,0,T1,2015-10-09,5
+2015,Berlin,Group Stage,5,H2K,T1,0,1,T1,2015-10-09,6
+2015,Berlin,Group Stage,6,T1,BKT,1,0,T1,2015-10-09,7
+2015,Berlin,Quarterfinals,7,T1,ahq,3,0,T1,2015-10-16,8
+2015,Berlin,Semifinals,8,Origen,T1,0,3,T1,2015-10-24,9
+2015,Berlin,Finals,9,T1,KOO Tigers,3,0,T1,2015-10-31,""

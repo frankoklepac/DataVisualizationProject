@@ -1,0 +1,10 @@
+Year,City,Phase,Match ID,Team 1,Team 2,Team 1 Score,Team 2 Score,Winner,Date,Next Match ID
+2021,Reykjavík,Group Stage,1,100Thieves,EDward Gaming,0,1,EDward Gaming,2021-10-11,2
+2021,Reykjavík,Group Stage,2,T1,EDward Gaming,0,1,EDward Gaming,2021-10-12,3
+2021,Reykjavík,Group Stage,3,EDward Gaming,DFM,1,0,EDward Gaming,2021-10-13,4
+2021,Reykjavík,Group Stage,4,EDward Gaming,DFM,1,0,EDward Gaming,2021-10-16,5
+2021,Reykjavík,Group Stage,5,EDward Gaming,T1,0,1,T1,2021-10-16,6
+2021,Reykjavík,Group Stage,6,EDward Gaming,100Thieves,0,1,100Thieves,2021-10-16,7
+2021,Reykjavík,Quarterfinals,7,Royal Never Give Up,EDward Gaming,2,3,EDward Gaming,2021-10-23,8
+2021,Reykjavík,Semifinals,8,EDward Gaming,Gen.G,3,2,EDward Gaming,2021-10-31,9
+2021,Reykjavík,Finals,9,EDward Gaming,DWG KIA,3,2,EDward Gaming,2021-11-06,""

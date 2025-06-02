@@ -1,0 +1,102 @@
+Team_Name,Player_Name,Role,Games,Wins,Losses,Win_Rate,Kills,Deaths,Assists,KDA,Champions_Played,Region
+100T,Eyla,Support,7,3,4,42.9%,0.86,4.14,10.29,2.69,6,LCS
+100T,Quid,Mid,7,3,4,42.9%,4.14,3.71,6.14,2.77,6,LCS
+100T,River,Top,7,3,4,42.9%,2.86,3.71,7.86,2.88,7,LCS
+100T,Sniper,Jungle,7,3,4,42.9%,3.43,3.14,5,2.68,3,LCS
+100T,Tomo,ADC,7,3,4,42.9%,4.57,2.71,6.29,4,7,LCS
+Bilibili Gaming,Bin,Top,20,13,7,65%,3.55,2,5.05,4.3,4,LPL
+Bilibili Gaming,Elk,ADC,20,13,7,65%,4.55,2.55,6.05,4.16,9,LPL
+Bilibili Gaming,knight,Mid,20,13,7,65%,4.65,2,6.65,5.65,12,LPL
+Bilibili Gaming,ON,Support,20,13,7,65%,0.5,3.7,9.65,2.74,9,LPL
+Bilibili Gaming,XUN,Jungle,17,12,5,70.6%,2.18,2.24,9.24,5.11,7,LPL
+Bilibili Gaming,Wei,Top,3,1,2,33.3%,1,4,11.33,3.08,2,LPL
+DWG KIA,Aiming,ADC,9,3,6,33.3%,5,2,4.67,4.83,6,LCK
+DWG KIA,Kingen,Top,9,3,6,33.3%,1.67,3.56,4.67,1.78,8,LCK
+DWG KIA,Lucid,Jungle,9,3,6,33.3%,1.89,4.56,6,1.73,6,LCK
+DWG KIA,Moham,Support,9,3,6,33.3%,0.44,5.11,9.22,1.89,7,LCK
+DWG KIA,ShowMaker,Mid,9,3,6,33.3%,3.56,2.67,4.78,3.13,7,LCK
+FlyQuest,Busio,Top,14,7,7,50%,1.07,2.5,8.07,3.66,7,LCS
+FlyQuest,Bwipo,Jungle,14,7,7,50%,2.14,4.14,4.86,1.69,8,LCS
+FlyQuest,Inspired,Mid,14,7,7,50%,1.07,2.07,8.64,4.69,8,LCS
+FlyQuest,Massu,ADC,14,7,7,50%,4.21,2.07,5,4.45,5,LCS
+FlyQuest,Quad,Support,14,7,7,50%,4,1.79,5.36,5.24,8,LCS
+FNC,Humanoid,Mid,6,2,4,33.3%,2.33,3.33,4.83,2.15,5,LEC
+FNC,Jun,Support,6,2,4,33.3%,0.67,3.17,8.5,2.89,2,LEC
+FNC,Noah,ADC,6,2,4,33.3%,4.5,1.5,4.33,5.89,5,LEC
+FNC,Oscarinin,Top,6,2,4,33.3%,2,3.5,4.83,1.95,5,LEC
+FNC,Razork,Jungle,6,2,4,33.3%,2,3.17,7.83,3.11,4,LEC
+Fukuoka SoftBank HAWKS gaming,DasheR,Support,4,0,4,0%,2.75,3.75,2.5,1.4,4,LJL
+Fukuoka SoftBank HAWKS gaming,Evi,Top,4,0,4,0%,1.5,3.75,4,1.47,3,LJL
+Fukuoka SoftBank HAWKS gaming,Forest,Jungle,4,0,4,0%,2,6.25,4,0.96,4,LJL
+Fukuoka SoftBank HAWKS gaming,Marble,Mid,4,0,4,0%,1.75,3.5,3.25,1.43,4,LJL
+Fukuoka SoftBank HAWKS gaming,Vsta,ADC,4,0,4,0%,1.25,4,4.75,1.5,3,LJL
+G2 Esports,BrokenBlade,Top,8,3,5,37.5%,3.38,2.5,5.88,3.7,6,LEC
+G2 Esports,Caps,Mid,8,3,5,37.5%,2.38,2.75,7.5,3.59,4,LEC
+G2 Esports,Hans Sama,ADC,8,3,5,37.5%,4.75,3.13,4.88,3.08,7,LEC
+G2 Esports,Mikyx,Support,8,3,5,37.5%,0.63,5.63,9.38,1.78,4,LEC
+G2 Esports,Yike,Jungle,8,3,5,37.5%,3.13,2.38,7.63,4.53,5,LEC
+GAM Esports,Easylove,ADC,12,7,5,58.3%,3.83,2.08,5.25,4.36,5,VCS
+GAM Esports,Elio,Support,12,7,5,58.3%,0.5,3,9.08,3.19,5,VCS
+GAM Esports,Emo,Mid,12,7,5,58.3%,3,1.92,4.42,3.87,6,VCS
+GAM Esports,Kiaya,Top,12,7,5,58.3%,3.83,2.08,5.42,4.44,6,VCS
+GAM Esports,Levi,Jungle,12,7,5,58.3%,2.92,2.92,6.5,3.23,5,VCS
+GEN.G,Canyon,Jungle,14,8,6,57.1%,1.93,1.93,7.71,5,5,LCK
+GEN.G,Chovy,Mid,14,8,6,57.1%,4.21,1.29,5.14,7.28,6,LCK
+GEN.G,Kiin,Top,14,8,6,57.1%,2.21,2.5,6.14,3.34,7,LCK
+GEN.G,Lehends,Support,14,8,6,57.1%,0.5,3.79,8.86,2.47,6,LCK
+GEN.G,Peyz,ADC,14,8,6,57.1%,4.14,1.21,6.21,8.53,8,LCK
+Hanwa Life Esports,Delight,Support,12,6,6,50%,0.5,3.25,10,3.23,6,LCK
+Hanwa Life Esports,Doran,Top,12,6,6,50%,3.17,3,5.5,2.89,4,LCK
+Hanwa Life Esports,Peanut,Jungle,12,6,6,50%,1,3.25,10.67,3.59,7,LCK
+Hanwa Life Esports,Viper,ADC,12,6,6,50%,5.58,2.5,5,4.23,8,LCK
+Hanwa Life Esports,Zeka,Mid,12,6,6,50%,3.75,2.75,6.17,3.61,6,LCK
+LNG Esports,GALA,ADC,8,5,3,62.5%,5,1.63,6.75,7.23,4,LPL
+LNG Esports,Hang,Support,8,5,3,62.5%,0.63,4.25,11.63,2.88,5,LPL
+LNG Esports,Scout,Mid,8,5,3,62.5%,4.25,1.25,7.38,9.3,5,LPL
+LNG Esports,Weiwei,Jungle,8,5,3,62.5%,2.25,3.25,10.5,3.92,3,LPL
+LNG Esports,Zika,Top,8,5,3,62.5%,4.63,3.13,7.13,3.76,4,LPL
+MAD Lions KOI,Alvaro,Support,10,5,5,50%,0.4,3.6,9.6,2.78,4,LEC
+MAD Lions KOI,Elyoya,Jungle,10,5,5,50%,2.4,2.6,7.9,3.96,7,LEC
+MAD Lions KOI,Fresskowy,ADC,10,5,5,50%,2.7,3.4,3.8,1.91,6,LEC
+MAD Lions KOI,Myrwn,Top,10,5,5,50%,1.9,3.3,4.8,2.03,7,LEC
+MAD Lions KOI,Supa,Mid,10,5,5,50%,5.6,2.8,4.6,3.64,6,LEC
+Movistar R7,Ceo,ADC,8,3,5,37.5%,4.88,3,5.13,3.33,6,LLA
+Movistar R7,Keine,Mid,8,3,5,37.5%,5.25,2.63,6.38,4.43,6,LLA
+Movistar R7,Lyonz,Support,8,3,5,37.5%,0.75,3.25,11.25,3.69,5,LLA
+Movistar R7,Oddie,Jungle,8,3,5,37.5%,1.75,3.75,9.38,2.97,6,LLA
+Movistar R7,Summit,Top,8,3,5,37.5%,2,3.13,6,2.56,4,LLA
+PaiN Gaming,Cariok,Jungle,12,5,7,41.7%,1.08,3.5,7.92,2.57,7,CBLOL
+PaiN Gaming,dyNquedo,Mid,12,5,7,41.7%,3.5,2.75,4.75,3,7,CBLOL
+PaiN Gaming,Kuri,Support,12,5,7,41.7%,0.33,3.17,8.92,2.92,7,CBLOL
+PaiN Gaming,TitaN,ADC,12,5,7,41.7%,3.33,2.33,5.42,3.75,6,CBLOL
+PaiN Gaming,Wizer,Top,12,5,7,41.7%,4,2.75,3.42,2.7,7,CBLOL
+PSG Talon,Azhi,Top,13,6,7,46.2%,2.85,2.31,6.31,3.97,8,PCS
+PSG Talon,Betty,ADC,13,6,7,46.2%,4.62,1.54,5.38,6.5,6,PCS
+PSG Talon,JunJia,Jungle,13,6,7,46.2%,2.23,2.92,8,3.5,5,PCS
+PSG Talon,Maple,Mid,13,6,7,46.2%,4.08,2.46,4.38,3.44,7,PCS
+PSG Talon,Woody,Support,13,6,7,46.2%,0.69,2.77,11,4.22,5,PCS
+T1,Faker,Mid,17,13,4,76.5%,3.53,2.12,5.71,4.36,6,LCK
+T1,Gumayusi,ADC,17,13,4,76.5%,4.29,1.47,5.18,6.44,7,LCK
+T1,Keria,Support,17,13,4,76.5%,0.47,1.94,9.82,5.3,8,LCK
+T1,Oner,Jungle,17,13,4,76.5%,2.65,1.71,7.47,5.93,8,LCK
+T1,Zeus,Top,17,13,4,76.5%,2.59,1.88,6.35,4.75,7,LCK
+Team Liquid,APA,Mid,10,5,5,50%,3.5,3.2,4.2,2.41,5,LCS
+Team Liquid,CoreJJ,Support,10,5,5,50%,0.8,2.9,9.7,3.62,6,LCS
+Team Liquid,Impact,Top,10,5,5,50%,2.5,2.9,4.7,2.48,6,LCS
+Team Liquid,UmTi,Jungle,10,5,5,50%,2.4,2.4,6.6,3.75,6,LCS
+Team Liquid,Yeon,ADC,10,5,5,50%,3.8,1.8,5,4.89,5,LCS
+TOP Esports,369,Top,8,4,4,50%,2.5,2.38,4.88,3.11,5,LPL
+TOP Esports,Creme,Mid,8,4,4,50%,3.13,2.38,5.38,3.58,5,LPL
+TOP Esports,JackeyLove,ADC,8,4,4,50%,4,2.63,5,3.43,6,LPL
+TOP Esports,Meiko,Support,8,4,4,50%,0.38,3.13,9.38,3.12,3,LPL
+TOP Esports,Tian,Jungle,8,4,4,50%,2,2.25,7.88,4.39,5,LPL
+Vikings Esports,Bie,Support,4,0,4,0%,0.5,4.25,5.5,1.41,3,VCS
+Vikings Esports,Gury,ADC,4,0,4,0%,1,3.25,6,2.15,4,VCS
+Vikings Esports,Kati,Mid,4,0,4,0%,3.75,4,3,1.69,3,VCS
+Vikings Esports,Nanaue,Top,4,0,4,0%,2.5,4.75,2.5,1.05,4,VCS
+Vikings Esports,Shogun,Jungle,4,0,4,0%,1.75,3.25,3.5,1.62,4,VCS
+Weibo Gaming,Breathe,Top,16,8,8,50%,3.81,2.75,5.31,3.32,7,LPL
+Weibo Gaming,Crisp,Support,16,8,8,50%,0.44,3.25,10.63,3.4,8,LPL
+Weibo Gaming,Light,ADC,16,8,8,50%,4.69,1.94,5.25,5.13,7,LPL
+Weibo Gaming,Tarzan,Jungle,16,8,8,50%,1.63,3.06,9.06,3.49,10,LPL
+Weibo Gaming,Xiaohu,Mid,16,8,8,50%,3.69,2.31,7.31,4.76,6,LPL

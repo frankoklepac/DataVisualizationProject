@@ -1,0 +1,10 @@
+Year,City,Phase,Match ID,Team 1,Team 2,Team 1 Score,Team 2 Score,Winner,Date,Next Match ID
+2014,Seoul,Group Stage,1,Edward Gaming,Samsung Galaxy,0,1,Samsung Galaxy,2014-09-18,2
+2014,Seoul,Group Stage,2,Samsung Galaxy,ahq,1,0,Samsung Galaxy,2014-09-18,3
+2014,Seoul,Group Stage,3,Dark Passage,Samsung Galaxy,0,1,Samsung Galaxy,2014-09-19,4
+2014,Seoul,Group Stage,4,Samsung Galaxy,Dark Passage,1,0,Samsung Galaxy,2014-09-20,5
+2014,Seoul,Group Stage,5,ahq,Samsung Galaxy,0,1,Samsung Galaxy,2014-09-20,6
+2014,Seoul,Group Stage,6,Samsung Galaxy,Edward Gaming,1,0,Samsung Galaxy,2014-09-21,7
+2014,Seoul,Quarterfinals,7,Samsung Galaxy,Team SoloMid,3,1,Samsung Galaxy,2014-10-03,8
+2014,Seoul,Semifinals,8,Samsung Galaxy,Samsung Galaxy Blue,3,0,Samsung Galaxy,2014-10-11,9
+2014,Seoul,Finals,9,Samsung Galaxy,Royal Club,3,1,Samsung Galaxy,2014-10-19,""
