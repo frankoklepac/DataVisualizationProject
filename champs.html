@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worlds Champion Stats 2024</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/champs.css">
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>League of Legends World Championship History</h1>
+        </div>
+        <div class="header-nav">
+            <ul>
+                <li><a href="index.html">Homepage</a></li>
+                <li><a href="statistics.html">Statistics</a></li>
+                <li><a href="source.html">Source</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="content">
+        <h1 class="content-header">Champion Stats from the Last Worlds</h1>
+        <p>Here you can find statistics for all champions played in the last World Championship.</p>
+        <p>Click on the column headers to sort the table.</p>
+        <div class="table-container">
+            <table id="champion-table">
+                <thead>
+                    <tr>
+                        <th data-key="Icon">Icon</th>
+                        <th data-key="Champion">Champion</th>
+                        <th data-key="Games">Games</th>
+                        <th data-key="PickBan_Rate">Pick/Ban Rate</th>
+                        <th data-key="Banned">Banned</th>
+                        <th data-key="Played">Played</th>
+                        <th data-key="Wins">Wins</th>
+                        <th data-key="Loses">Loses</th>
+                        <th data-key="Win_Rate">Win Rate</th>
+                        <th data-key="Kills">Kills</th>
+                        <th data-key="Deaths">Deaths</th>
+                        <th data-key="Assists">Assists</th>
+                        <th data-key="KDA">KDA</th>
+                        <th data-key="Role">Role</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <h1 class="donut-header">Unique champions per position</h1>
+        <div id="donut"></div>
+
+        </div>
+    </div>
+
+    <script>
+        function normalizeChampionName(name) {
+            const nameMap = {
+                "Kai'Sa": "Kaisa",
+                "K'Sante": "KSante",
+                "Renata Glasc": "RenataGlasc",
+                "Jarvan IV": "JarvanIV"
+            };
+            return nameMap[name] || name.replace(/[^a-zA-Z0-9]/g, '');
+        }
+
+        const tooltip = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        let sortKey = null;
+        let sortAscending = true;
+
+        d3.csv("data/champions_2024.csv").then(function(data) {
+            const tbody = d3.select("#champion-table tbody");
+            const headers = d3.select("#champion-table thead tr").selectAll("th");
+
+            function renderTable(data) {
+                tbody.selectAll("tr").remove();
+
+                data.forEach(function(d) {
+                    const row = tbody.append("tr");
+                    const normalizedName = normalizeChampionName(d.Champion);
+                    const iconPath = `champion_icons/${normalizedName}Square.png`;
+
+                    row.append("td")
+                        .append("img")
+                        .attr("src", iconPath)
+                        .attr("class", "champion-icon")
+                        .attr("alt", `${d.Champion} icon`);
+
+                    row.append("td").text(d.Champion);
+                    row.append("td").text(d.Games);
+                    row.append("td").text(d.PickBan_Rate);
+                    row.append("td").text(d.Banned);
+                    row.append("td").text(d.Played);
+                    row.append("td").text(d.Wins);
+                    row.append("td").text(d.Loses);
+                    row.append("td").text(d.Win_Rate);
+                    row.append("td").text(d.Kills);
+                    row.append("td").text(d.Deaths);
+                    row.append("td").text(d.Assists);
+                    row.append("td").text(d.KDA);
+                    row.append("td").text(d.Role);
+
+                    row.on("mouseover", function(event) {
+                        d3.select(this).style("background", "#38c1a6");
+                        tooltip.transition().duration(150).style("opacity", 0.95);
+                        tooltip.html(
+                            `<strong>${d.Champion}</strong><br>` +
+                            `Win Rate: ${d.Win_Rate}<br>` +
+                            `KDA: ${d.KDA}<br>` +
+                            `Games: ${d.Games}`
+                        )
+                            .style("left", (event.pageX + 10) + "px")
+                            .style("top", (event.pageY - 28) + "px");
+                    })
+                    .on("mousemove", function(event) {
+                        tooltip.style("left", (event.pageX + 10) + "px")
+                            .style("top", (event.pageY - 28) + "px");
+                    })
+                    .on("mouseout", function() {
+                        d3.select(this).style("background", "#1a2746");
+                        tooltip.transition().duration(150).style("opacity", 0);
+                    });
+                });
+            }
+
+            renderTable(data);
+
+            headers.on("click", function(event, d) {
+                const key = d3.select(this).attr("data-key");
+                if (key === "Icon") return; 
+
+                if (sortKey === key) {
+                    sortAscending = !sortAscending;
+                } else {
+                    sortKey = key;
+                    sortAscending = true;
+                }
+
+                const sortedData = data.slice().sort((a, b) => {
+                    let aValue = a[key];
+                    let bValue = b[key];
+
+                    const numericKeys = [
+                        "Games", "PickBan_Rate", "Banned", "Played", "Wins", "Loses",
+                        "Win_Rate", "Kills", "Deaths", "Assists", "KDA"
+                    ];
+                    if (numericKeys.includes(key)) {
+                        aValue = parseFloat(aValue.replace("%", ""));
+                        bValue = parseFloat(bValue.replace("%", ""));
+                    }
+
+                    if (sortAscending) {
+                        return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+                    } else {
+                        return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+                    }
+                });
+
+                renderTable(sortedData);
+            });
+        }).catch(function(error) {
+            console.error("Error loading CSV:", error);
+        });
+
+        d3.csv("data/champions_2024.csv").then(function(data) {
+            const roleCounts = d3.rollup(
+                data,
+                v => v.length,
+                d => d.Role
+            );
+
+            const roles = Array.from(roleCounts.keys());
+            const counts = Array.from(roleCounts.values());
+
+            const width = 350, height = 350, margin = 30;
+            const radius = Math.min(width, height) / 2 - margin;
+
+            const svg = d3.select("#donut")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .append("g")
+                .attr("transform", `translate(${width/2},${height/2})`);
+
+            const color = d3.scaleOrdinal()
+                .domain(roles)
+                .range(d3.schemeSet2);
+
+            const pie = d3.pie()
+                .value(d => d[1]);
+
+            const data_ready = pie(Array.from(roleCounts.entries()));
+
+            const arc = d3.arc()
+                .innerRadius(radius * 0.55) 
+                .outerRadius(radius);
+
+            svg.selectAll('path')
+                .data(data_ready)
+                .join('path')
+                .attr('d', arc)
+                .attr('fill', d => color(d.data[0]))
+                .attr("stroke", "#232b3a")
+                .style("stroke-width", "2px")
+                .on("mouseover", function(event, d) {
+                    d3.select(this)
+                        .transition()
+                        .duration(150)
+                        .attr("d", d3.arc()
+                            .innerRadius(radius * 0.52)
+                            .outerRadius(radius + 12)
+                        );
+                })
+                .on("mouseout", function(event, d) {
+                    d3.select(this)
+                        .transition()
+                        .duration(150)
+                        .attr("d", arc);
+                });
+
+            svg.selectAll('text')
+                .data(data_ready)
+                .join('text')
+                .text(d => `${d.data[0]} (${d.data[1]})`)
+                .attr("transform", d => `translate(${arc.centroid(d)})`)
+                .style("text-anchor", "middle")
+                .style("font-size", "13px")
+                .style("fill", "#fff");
+        });
+    </script>
+</body>
+</html>

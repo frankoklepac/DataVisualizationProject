@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>League Worlds History</title>
-    <link rel="stylesheet" href="style/style.css">
+    <link rel="stylesheet" href="style/style.css">  
     <link rel="stylesheet" href="style/world.css">
     <script src="https://d3js.org/d3.v7.min.js"></script>
 </head>
@@ -24,9 +24,73 @@
     <div class="content">
     <svg id="map" width="100%" height="calc(75vh)" style="background: #10182b;"></svg>
     </div>
+    <div id="road-to-final">
+        <button id="close-bracket" style="position:absolute;top:12px;right:18px;">Close</button>
+        <h2 style="margin-top:0;">Road to the Final</h2>
+        <div id="bracket-content"></div>
+    </div>
     <div class="footer">
     </div>
     <script>
+    d3.select("#road-to-final").style("display", "none");
+    
+    // Ovu funkciju koristim kako bih prikazao put do finala za određeni grad
+    // Kao argument prima ime grada koje se onda koristi kako bi se dohvatili podaci iz CSV datoteke
+    // i prikazali odgovarajući mečevi u HTML formatu
+    function showBracketsForCity(city) {
+        d3.csv("data/finals.csv").then(finalsData => {
+            const years = finalsData
+                .filter(d => d.City === city)
+                .map(d => d.Year);
+
+            if (years.length === 0) {
+                d3.select("#bracket-content").html("<div>No data available for this city.</div>");
+                d3.select("#road-to-final").style("display", "block");
+                return;
+            }
+
+            const csvPaths = years.map(year => `data/finals_data/${year}_${city.replace(/ /g, "_")}.csv`);
+
+            Promise.all(csvPaths.map(path => d3.csv(path)))
+                .then(allBrackets => {
+                    let html = `<div style="display:flex;gap:18px;flex-wrap:nowrap;flex-direction:row;">`;
+                    allBrackets.forEach((bracketData, i) => {
+                        const finalsRow = bracketData.find(m => m.Phase === "Finals");
+                        const winner = finalsRow ? finalsRow.Winner.trim() : null;
+                        const phaseOrder = ["Group Stage", "Round of 16", "Quarterfinals", "Semifinals", "Finals"];
+                        const winnerMatches = bracketData
+                            .filter(m => m["Team 1"].trim() === winner || m["Team 2"].trim() === winner)
+                            .sort((a, b) => phaseOrder.indexOf(a.Phase) - phaseOrder.indexOf(b.Phase));
+
+                        html += `<div style="background:#1a2746;padding:10px 12px;border-radius:8px;min-width:180px;max-width:220px; margin-right:8px;">
+                            <h3 style="margin-top:0; font-size:13px;">${winner} - ${years[i]} ${city}</h3>
+                            <div>`;
+                        winnerMatches.forEach(match => {
+                            const team1 = match["Team 1"].trim() === winner
+                                ? `<span style="font-weight:bold; color:#e9c46a;">${match["Team 1"].trim()}</span>`
+                                : match["Team 1"].trim();
+                            const team2 = match["Team 2"].trim() === winner
+                                ? `<span style="font-weight:bold; color:#e9c46a;">${match["Team 2"].trim()}</span>`
+                                : match["Team 2"].trim();
+                            html += `<div style="background:#232b3a;padding:7px 10px;border-radius:6px;margin-bottom:7px;">
+                                <b>${match.Phase}</b>${match.Date ? ` (${match.Date})` : ""}<br>
+                                ${team1} <b>${match["Team 1 Score"]}</b> - <b>${match["Team 2 Score"]}</b> ${team2}
+                            </div>`;
+                        });
+                        html += `</div></div>`;
+                    });
+                    html += `</div>`;
+
+                    d3.select("#bracket-content").html(html);
+                    d3.select("#road-to-final").style("display", "block");
+                });
+            });
+        }
+
+        d3.select("#close-bracket").on("click", function() {
+            d3.select("#road-to-final").style("display", "none");
+        });
+
         const svg = d3.select("#map");
         const width = parseInt(svg.style("width"));
         const height = 600;
@@ -65,6 +129,10 @@
             "London": "United Kingdom"
         };
 
+        // Učitavanje geojson i csv podataka kako bi se prikazala interaktivna karta svijeta
+        // Zemlje domaćini su obojene u boju koja se razlikuje od ostalih zemalja, hoverom se prikazuju informacije o broju finala
+        // Klikon na zemlju se zumira na tu zemlju i gradovi domaćini finala su istaknuti sa World logotipom, hoverom preko grada se prikazuje broj finala odigranihu tom gradu
+        // Klikom na grad se prikazuje put do finala za taj grad
         Promise.all([
             d3.json("geojson/custom_no_guiana.geo.json"),
             d3.csv("data/finals.csv")
@@ -163,39 +231,49 @@
             }));
 
             const cityDots = svg.append("g")
-            .selectAll("circle")
-            .data(hostCities)
-            .join("circle")
-            .attr("cx", d => projection(d.coords)[0])
-            .attr("cy", d => projection(d.coords)[1])
-            .attr("r", 1)
-            .attr("fill", "#ffd700")
-            .attr("stroke", "#fff")
-            .attr("stroke-width", 1)
-            .attr("opacity", 0)
-            .style("cursor", "pointer")
-            .on("mouseover", function(event, d) {
-                d3.select(this).attr("fill", "#fff176");
-                const finals = finalsPerCity[d.name] || 0;
-                tooltip.transition().duration(150).style("opacity", 0.95);
-                tooltip.html(`<strong>${d.name}</strong><br/>Finals: ${finals}`)
-                .style("left", (event.pageX + 10) + "px")
-                .style("top", (event.pageY - 28) + "px");
-            })
-            .on("mousemove", function(event) {
-                tooltip.style("left", (event.pageX + 10) + "px")
+                .selectAll("image")
+                .data(hostCities)
+                .join("image")
+                .attr("xlink:href", "images/worlds_logo.png") 
+                .attr("width", d => (d.name === "Seoul" || d.name === "Incheon") ? 9 : 12)
+                .attr("height", d => (d.name === "Seoul" || d.name === "Incheon") ? 9 : 12)
+                .attr("x", d => {
+                    const w = (d.name === "Seoul" || d.name === "Incheon") ? 9 : 12;
+                    if (d.name === "Seoul") return projection(d.coords)[0] - w;
+                    if (d.name === "Incheon") return projection(d.coords)[0];
+                    return projection(d.coords)[0] - w / 2;
+                })
+                .attr("y", d => {
+                    const h = (d.name === "Seoul" || d.name === "Incheon") ? 9 : 12;
+                    return projection(d.coords)[1] - h / 2;
+                })
+                .attr("opacity", 0)
+                .style("cursor", "pointer")
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("fill", "#fff176");
+                    const finals = finalsPerCity[d.name] || 0;
+                    tooltip.transition().duration(150).style("opacity", 0.95);
+                    tooltip.html(`<strong>${d.name}</strong><br/>Finals: ${finals}`)
+                    .style("left", (event.pageX + 10) + "px")
                     .style("top", (event.pageY - 28) + "px");
-            })
-            .on("mouseout", function(event, d) {
-                d3.select(this).attr("fill", "#ffd700");
-                tooltip.transition().duration(150).style("opacity", 0);
-            });
+                })
+                .on("mousemove", function(event) {
+                    tooltip.style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", function(event, d) {
+                    d3.select(this).attr("fill", "#ffd700");
+                    tooltip.transition().duration(150).style("opacity", 0);
+                })
+                .on("click", function(event, d) {
+                    showBracketsForCity(d.name);
+                });
 
-            const zoom = d3.zoom()
-            .scaleExtent([1, 8])
-            .on("zoom", (event) => {
-                svg.selectAll("g").attr("transform", event.transform);
-            });
+                const zoom = d3.zoom()
+                .scaleExtent([1, 8])
+                .on("zoom", (event) => {
+                    svg.selectAll("g").attr("transform", event.transform);
+                });
 
             svg.call(zoom);
 
@@ -204,6 +282,7 @@
                 svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity);
                 cityDots.attr("opacity", 0);
             }
+            
             });
         });
     </script>

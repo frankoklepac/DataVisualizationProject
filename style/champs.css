@@ -1,0 +1,61 @@
+.content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    background-color: #10182b;
+    color: #F9F6EE;
+}
+
+.table-container {
+    max-width: 900px;
+    margin: 20px auto;
+    overflow-x: auto;
+}
+table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 600px;
+    background: #1a2746; 
+}
+th, td {
+    border: 1px solid #2a9d8f; 
+    padding: 4px;
+    text-align: center;
+    white-space: nowrap;
+    color: #ffffff;
+}
+th {
+    background: #2a9d8f;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+img.champion-icon {
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+}
+tr {
+    background: #1a2746; 
+}
+tr:hover {
+    background: #38c1a6; 
+}
+.tooltip {
+    position: absolute;
+    background: #222; 
+    color: #fff; 
+    padding: 6px 12px;
+    border-radius: 6px;
+    pointer-events: none;
+    opacity: 0;
+    font-size: 14px;
+}
+
+.content-header, .donut-header{
+    text-align:center; 
+    margin-top:32px; 
+    color:#e9c46a;
+}

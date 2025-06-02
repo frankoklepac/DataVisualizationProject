@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>  
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Player Stats - 2024</title>
+  <link rel="stylesheet" href="style/style.css">
+  <link rel="stylesheet" href="style/player_stats_2024.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+</head>
+<body>
+    <div class="header">
+    <div>
+        <h1>League of Legends World Championship History</h1>
+    </div>
+    <div class="header-nav">
+        <ul>
+            <li><a href="index.html">Homepage</a></li>
+            <li><a href="statistics.html">Statistics</a></li>
+            <li><a href="source.html">Source</a></li>
+        </ul>
+    </div>
+  </div>
+  <div id="player-filters" style="margin-bottom:18px;"></div>
+  
+  <div class="content">
+    <div class="content-table">
+      <table id="player-stats-table">
+        <thead>
+          <tr>
+            <th>Player</th>
+            <th>Team</th>
+            <th data-key="Region">Region</th>
+            <th data-key="Role">Role</th>
+            <th data-key="Kills">Kills</th>
+            <th data-key="Deaths">Deaths</th>
+            <th data-key="Assists">Assists</th>
+            <th data-key="KDA">KDA</th>
+            <th data-key="Games">Games Played</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+    <div class="content-scatter">
+
+    </div>
+  </div>
+  <script>
+    let sortKey = null;
+    let sortAscending = true;
+    d3.csv("data/player_stats_2024_with_roles.csv").then(function(data) {
+
+    const regions = Array.from(new Set(data.map(d => d.Region)));
+    const roles = Array.from(new Set(data.map(d => d.Role)));
+    const filterDiv = d3.select("#player-filters");
+
+    filterDiv.append("span").text("Region: ");
+    regions.forEach(region => {
+        filterDiv.append("label")
+            .style("margin-right", "12px")
+            .html(`<input type="checkbox" class="region-filter" value="${region}" checked> ${region}`);
+    });
+
+    filterDiv.append("span").text("Role: ");
+    roles.forEach(role => {
+        filterDiv.append("label")
+            .style("margin-right", "12px")
+            .html(`<input type="checkbox" class="role-filter" value="${role}" checked> ${role}`);
+    });
+
+    function renderTable(filteredData) {
+        const tbody = d3.select("#player-stats-table tbody");
+        tbody.html(""); 
+
+        let dataToShow = filteredData;
+        if (sortKey) {
+            dataToShow = filteredData.slice().sort((a, b) => {
+                let aValue = a[sortKey];
+                let bValue = b[sortKey];
+
+                const numericKeys = ["Kills", "Deaths", "Assists", "KDA", "Games"];
+                if (numericKeys.includes(sortKey)) {
+                    aValue = parseFloat(aValue);
+                    bValue = parseFloat(bValue);
+                }
+
+                if (sortAscending) {
+                    return aValue < bValue ? -1 : aValue > bValue ? 1 : 0;
+                } else {
+                    return aValue > bValue ? -1 : aValue < bValue ? 1 : 0;
+                }
+            });
+        }
+
+        dataToShow.forEach(d => {
+            tbody.append("tr").html(`
+                <td>${d.Player_Name}</td>
+                <td>${d.Team_Name}</td>
+                <td>${d.Region}</td>
+                <td>${d.Role}</td>
+                <td>${d.Kills}</td>
+                <td>${d.Deaths}</td>
+                <td>${d.Assists}</td>
+                <td>${d.KDA}</td>
+                <td>${d.Games}</td>
+            `);
+        });
+    }
+    function renderScatter(filteredData) {
+        d3.select(".content-scatter svg").remove();
+        d3.select(".content-scatter .scatter-legend").remove(); // Remove old legend
+
+        const width = 600, height = 400, margin = 40;
+
+        const svg = d3.select(".content-scatter")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        const x = d3.scaleLinear()
+            .domain([0, d3.max(filteredData, d => +d.Kills) || 10])
+            .range([margin, width - margin]);
+
+        const y = d3.scaleLinear()
+            .domain([0, d3.max(filteredData, d => +d.Assists) || 10])
+            .range([height - margin, margin]);
+
+        const roles = [...new Set(filteredData.map(d => d.Role))];
+        const color = d3.scaleOrdinal(d3.schemeSet2)
+            .domain(roles);
+
+        svg.append("g")
+            .attr("transform", `translate(0,${height - margin})`)
+            .call(d3.axisBottom(x));
+        svg.append("g")
+            .attr("transform", `translate(${margin},0)`)
+            .call(d3.axisLeft(y));
+
+        svg.selectAll("circle")
+            .data(filteredData)
+            .join("circle")
+            .attr("cx", d => x(+d.Kills))
+            .attr("cy", d => y(+d.Assists))
+            .attr("r", 6)
+            .attr("fill", d => color(d.Role))
+            .attr("opacity", 0.8)
+            .append("title")
+            .text(d => `${d.Player_Name} (${d.Team_Name})\n${d.Role}\nKills: ${d.Kills}\nDeaths: ${d.Deaths}\nAssists: ${d.Assists}`);
+
+        svg.append("text")
+            .attr("x", width / 2)
+            .attr("y", height - 5)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#fff")
+            .text("Kills");
+
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("x", -height / 2)
+            .attr("y", 18)
+            .attr("text-anchor", "middle")
+            .attr("fill", "#fff")
+            .text("Assists");
+
+        const legend = d3.select(".content-scatter")
+            .append("div")
+            .attr("class", "scatter-legend")
+            .style("margin-top", "12px")
+            .style("display", "flex")
+            .style("gap", "18px")
+            .style("flex-wrap", "wrap");
+
+        roles.forEach(role => {
+            legend.append("span")
+                .style("display", "flex")
+                .style("align-items", "center")
+                .style("gap", "6px")
+                .html(`<span style="display:inline-block;width:14px;height:14px;background:${color(role)};border-radius:50%;margin-right:4px;"></span>${role}`);
+        });
+    } 
+
+
+    function updateAll() {
+        const checkedRegions = Array.from(document.querySelectorAll(".region-filter:checked")).map(cb => cb.value);
+        const checkedRoles = Array.from(document.querySelectorAll(".role-filter:checked")).map(cb => cb.value);
+        const filtered = data.filter(d => checkedRegions.includes(d.Region) && checkedRoles.includes(d.Role));
+        renderTable(filtered);
+        renderScatter(filtered);
+    }
+
+    updateAll();
+    d3.selectAll("#player-stats-table th[data-key]").on("click", function() {
+        const key = d3.select(this).attr("data-key");
+        if (sortKey === key) {
+            sortAscending = !sortAscending;
+        } else {
+            sortKey = key;
+            sortAscending = true;
+        }
+        updateAll();
+    });
+    d3.selectAll(".region-filter").on("change", updateAll);
+    d3.selectAll(".role-filter").on("change", updateAll);
+    });
+       
+  </script>
+</body>
+</html>
