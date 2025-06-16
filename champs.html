@@ -22,39 +22,50 @@
         </div>
     </div>
     <div class="content">
-        <h1 class="content-header">Champion Stats from the Last Worlds</h1>
-        <p>Here you can find statistics for all champions played in the last World Championship.</p>
-        <p>Click on the column headers to sort the table.</p>
-        <div class="table-container">
-            <table id="champion-table">
-                <thead>
-                    <tr>
-                        <th data-key="Icon">Icon</th>
-                        <th data-key="Champion">Champion</th>
-                        <th data-key="Games">Games</th>
-                        <th data-key="PickBan_Rate">Pick/Ban Rate</th>
-                        <th data-key="Banned">Banned</th>
-                        <th data-key="Played">Played</th>
-                        <th data-key="Wins">Wins</th>
-                        <th data-key="Loses">Loses</th>
-                        <th data-key="Win_Rate">Win Rate</th>
-                        <th data-key="Kills">Kills</th>
-                        <th data-key="Deaths">Deaths</th>
-                        <th data-key="Assists">Assists</th>
-                        <th data-key="KDA">KDA</th>
-                        <th data-key="Role">Role</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <div class="champs-header">
+            <h1>Champion Stats from the Last Worlds</h1>
+            <ul>
+                <li>This table shows the performance of each champion in the last World Championship.</li>
+                <li>Click on any column header to sort the table by that metric.</li>
+                <li>Hover over a table rows icon to see key stats in a tooltip.</li>
+            </ul>
         </div>
+        <div class="data-container">
+            <div class="table-container">
+                <table id="champion-table">
+                    <thead>
+                        <tr>
+                            <th data-key="Icon">Icon</th>
+                            <th data-key="Champion">Champion</th>
+                            <th data-key="Games">Games</th>
+                            <th data-key="PickBan_Rate">Pick/Ban Rate</th>
+                            <th data-key="Banned">Banned</th>
+                            <th data-key="Played">Played</th>
+                            <th data-key="Wins">Wins</th>
+                            <th data-key="Loses">Loses</th>
+                            <th data-key="Win_Rate">Win Rate</th>
+                            <th data-key="Kills">Kills</th>
+                            <th data-key="Deaths">Deaths</th>
+                            <th data-key="Assists">Assists</th>
+                            <th data-key="KDA">KDA</th>
+                            <th data-key="Role">Role</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
 
-        <h1 class="donut-header">Unique champions per position</h1>
-        <div id="donut"></div>
-
+            <div class="charts-container">
+                <h2 class="donut-header">Unique Champions by Role</h2>
+                <div id="donut"></div>
+                
+                <h2 class="bar-header">Top 10 Champions by Pick/Ban Rate</h2>
+                <div id="bar-chart"></div>
+            </div>
         </div>
     </div>
-        <div class="footer">
+
+    <div class="footer">
     </div>
     <script>
         function normalizeChampionName(name) {
@@ -107,7 +118,6 @@
                     row.append("td").text(d.Role);
 
                     row.on("mouseover", function(event) {
-                        d3.select(this).style("background", "#38c1a6");
                         tooltip.transition().duration(150).style("opacity", 0.95);
                         tooltip.html(
                             `<strong>${d.Champion}</strong><br>` +
@@ -121,10 +131,6 @@
                     .on("mousemove", function(event) {
                         tooltip.style("left", (event.pageX + 10) + "px")
                             .style("top", (event.pageY - 28) + "px");
-                    })
-                    .on("mouseout", function() {
-                        d3.select(this).style("background", "#1a2746");
-                        tooltip.transition().duration(150).style("opacity", 0);
                     });
                 });
             }
@@ -232,6 +238,80 @@
                 .style("text-anchor", "middle")
                 .style("font-size", "13px")
                 .style("fill", "#fff");
+        });
+
+         d3.csv("data/champions_2024.csv").then(function(data) {
+
+            const topChamps = data.slice()
+                .sort((a, b) => parseFloat(b.PickBan_Rate) - parseFloat(a.PickBan_Rate))
+                .slice(0, 10);
+
+            const barMargin = {top: 20, right: 30, bottom: 40, left: 90};
+            const barWidth = 400 - barMargin.left - barMargin.right;
+            const barHeight = 300 - barMargin.top - barMargin.bottom;
+
+            const barSvg = d3.select("#bar-chart")
+                .append("svg")
+                .attr("width", barWidth + barMargin.left + barMargin.right)
+                .attr("height", barHeight + barMargin.top + barMargin.bottom)
+                .append("g")
+                .attr("transform", `translate(${barMargin.left},${barMargin.top})`);
+
+            const x = d3.scaleLinear()
+                .domain([0, 100])
+                .range([0, barWidth]);
+
+            const y = d3.scaleBand()
+                .domain(topChamps.map(d => d.Champion))
+                .range([0, barHeight])
+                .padding(0.1);
+
+            barSvg.append("g")
+                .attr("class", "grid")
+                .call(d3.axisBottom(x)
+                    .tickSize(-barHeight)
+                    .tickFormat(""))
+                .selectAll("line")
+                .attr("stroke", "#3a4558");
+
+            barSvg.selectAll("rect")
+                .data(topChamps)
+                .enter()
+                .append("rect")
+                .attr("y", d => y(d.Champion))
+                .attr("height", y.bandwidth())
+                .attr("x", 0)
+                .attr("width", d => x(parseFloat(d.PickBan_Rate)))
+                .attr("fill", "#2a9d8f")
+                .on("mouseover", function(event, d) {
+                    d3.select(this).attr("fill", "#38c1a6");
+                    tooltip.transition().duration(150).style("opacity", 0.95);
+                    tooltip.html(
+                        `<strong>${d.Champion}</strong><br>` +
+                        `Pick/Ban Rate: ${d.PickBan_Rate}%<br>` +
+                        `Win Rate: ${d.Win_Rate}`
+                    )
+                    .style("left", (event.pageX + 10) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", function() {
+                    d3.select(this).attr("fill", "#2a9d8f");
+                    tooltip.transition().duration(150).style("opacity", 0);
+                });
+
+            barSvg.append("g")
+                .call(d3.axisLeft(y));
+
+            barSvg.append("g")
+                .attr("transform", `translate(0,${barHeight})`)
+                .call(d3.axisBottom(x).tickFormat(d => `${d}%`));
+
+            barSvg.append("text")
+                .attr("class", "axis-label")
+                .attr("x", barWidth / 2)
+                .attr("y", barHeight + barMargin.bottom - 10)
+                .style("text-anchor", "middle")
+                .text("Pick/Ban Rate (%)");
         });
     </script>
 </body>

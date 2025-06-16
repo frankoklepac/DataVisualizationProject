@@ -22,7 +22,10 @@
     </div>
   </div>
   <div class="content">
-    <div class="finals-body">
+    <div class="finals-header">
+      <h1>Finals Viewership and Prize Pool</h1>
+      <p>Explore the viewership and prize pool of the League of Legends World Championship finals.</p>
+      <div class="finals-body">
       <div class="finals-buttons">
         <button id="viewership-btn">Show Viewership</button>
         <button id="prizepool-btn">Show Prize Pool</button>
@@ -202,7 +205,7 @@
           .attr("text-anchor", "middle")
           .attr("fill", "#000")
           .attr("font-size", "12px")
-          .text("After Season 6, China viewers not counted");
+          .text("After Season 6, viewers from China are not counted due to a change in broadcasting rights");
       }
 
       if (annotateSeason8) {
@@ -221,7 +224,7 @@
           .attr("text-anchor", "middle")
           .attr("fill", "#000")
           .attr("font-size", "12px")
-          .text("After Season 8, prizepool has a fixed priced with bonuses from skin sales");
+          .text("After Season 8, prizepool has a fixed amount with bonuses from skin sales");
       }
 
     }

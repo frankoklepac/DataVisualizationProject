@@ -6,48 +6,99 @@
     width: 100%;
     background-color: #10182b;
     color: #F9F6EE;
+    padding: 0;
+}
+
+.data-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
+.champs-header {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #F9F6EE;
+    background-color: #10182b;
+}
+
+
+.champs-header ul {
+    list-style: none;
+    padding: 5px;
+    margin: 5px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 20px;
 }
 
 .table-container {
-    width: 1200px;
-    margin: 20px auto;
-    overflow-x: auto;
+    flex: 2;
+    margin-left: 5px;
 }
+
+.charts-container {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
 table {
-    border-collapse: collapse;
-    width: 100%;
-    min-width: 600px;
-    background: #1a2746; 
+  width: 100%;
+  border-collapse: collapse;
+  background: #232b3a;
+  color: #f9f6ee;
+  font-size: 16px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
 }
-th, td {
-    border: 1px solid #2a9d8f; 
-    padding: 4px;
-    text-align: center;
-    white-space: nowrap;
-    color: #ffffff;
-}
-th {
-    background: #2a9d8f;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    cursor: pointer;
-}
+
+
+
 img.champion-icon {
     width: 25px;
     height: 25px;
     vertical-align: middle;
 }
-tr {
-    background: #1a2746; 
+
+
+th, td {
+  padding: 10px 14px;
+    text-align: center;
 }
+
+th {
+  background: #1a2746;
+  color: #e9c46a;
+  cursor: pointer;
+  user-select: none;
+}
+
+tr:nth-child(even) {
+  background: #1a1f2b;
+}
+
 tr:hover {
-    background: #38c1a6; 
+  background: #2a3550;
 }
+
+td {
+  text-align: right;
+}
+td:first-child {
+  text-align: left;
+}
+
 .tooltip {
     position: absolute;
-    background: #222; 
-    color: #fff; 
+    background: #222;
+    color: #fff;
     padding: 6px 12px;
     border-radius: 6px;
     pointer-events: none;
@@ -55,8 +106,37 @@ tr:hover {
     font-size: 14px;
 }
 
-.content-header, .donut-header{
-    text-align:center; 
-    margin-top:32px; 
-    color:#e9c46a;
+
+.donut-header, .bar-header {
+    text-align: center;
+    color: #e9c46a;
+    margin-bottom: 15px;
+}
+
+#donut svg, #bar-chart svg {
+    display: block;
+    margin: 0 auto;
+    background: #1a2746;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.axis-label {
+    fill: #F9F6EE;
+    font-size: 12px;
+}
+
+.grid line {
+    stroke: #3a4558;
+    stroke-dasharray: 4,4;
+}
+
+@media (max-width: 1200px) {
+    .data-container {
+        flex-direction: column;
+    }
+    
+    .table-container, .charts-container {
+        width: 100%;
+    }
 }

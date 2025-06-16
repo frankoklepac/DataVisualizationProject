@@ -57,7 +57,7 @@
                     allBrackets.forEach((bracketData, i) => {
                         const finalsRow = bracketData.find(m => m.Phase === "Finals");
                         const winner = finalsRow ? finalsRow.Winner.trim() : null;
-                        const phaseOrder = ["Group Stage", "Round of 16", "Quarterfinals", "Semifinals", "Finals"];
+                        const phaseOrder = ["Finals", "Semifinals", "Quarterfinals", "Round of 16", "Group Stage"];
                         const winnerMatches = bracketData
                             .filter(m => m["Team 1"].trim() === winner || m["Team 2"].trim() === winner)
                             .sort((a, b) => phaseOrder.indexOf(a.Phase) - phaseOrder.indexOf(b.Phase));
